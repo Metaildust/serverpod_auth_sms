@@ -1,0 +1,8 @@
+### SMS 验证码验证结果
+class: SmsVerifyLoginResult
+serverOnly: false
+fields:
+  ### 验证成功后的 token，用于 finishLogin
+  token: String
+  ### 是否需要设置密码（新用户自动注册时需要）
+  needsPassword: bool

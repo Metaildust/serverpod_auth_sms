@@ -1,0 +1,15 @@
+### Pending SMS login request.
+class: SmsLoginRequest
+serverOnly: true
+table: serverpod_auth_sms_login_request
+fields:
+  id: UuidValue?, defaultPersist=random_v7
+  createdAt: DateTime, default=now
+  phoneHash: String
+  challenge: module:idp:SecretChallenge?, relation(onDelete=Cascade)
+  loginChallenge: module:idp:SecretChallenge?, relation(onDelete=Cascade, optional)
+
+indexes:
+  serverpod_auth_sms_login_request_phone_hash:
+    fields: phoneHash
+    unique: true

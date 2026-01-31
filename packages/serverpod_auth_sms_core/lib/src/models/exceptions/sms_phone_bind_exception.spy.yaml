@@ -1,0 +1,4 @@
+### Exception to be thrown if phone bind fails.
+exception: SmsPhoneBindException
+fields:
+  reason: SmsPhoneBindExceptionReason

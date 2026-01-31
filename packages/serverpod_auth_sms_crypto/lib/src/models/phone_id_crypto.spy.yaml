@@ -1,0 +1,20 @@
+### Encrypted phone storage.
+class: PhoneIdCrypto
+serverOnly: true
+table: serverpod_auth_sms_phone_id_crypto
+fields:
+  id: UuidValue?, defaultPersist=random_v7
+  authUser: module:auth:AuthUser?, relation(onDelete=Cascade)
+  createdAt: DateTime, default=now
+  phoneHash: String
+  phoneEncrypted: ByteData
+  nonce: ByteData
+  mac: ByteData
+
+indexes:
+  serverpod_auth_sms_phone_id_crypto_phone:
+    fields: phoneHash
+    unique: true
+  serverpod_auth_sms_phone_id_crypto_auth_user:
+    fields: authUserId
+    unique: true
