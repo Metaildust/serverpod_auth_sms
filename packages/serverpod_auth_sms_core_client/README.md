@@ -2,46 +2,46 @@
 
 [![pub package](https://img.shields.io/pub/v/serverpod_auth_sms_core_client.svg)](https://pub.dev/packages/serverpod_auth_sms_core_client)
 
-Serverpod 短信认证核心模块的客户端包。
+Client package for Serverpod SMS authentication core module.
 
-[English](README.en.md)
+[中文文档](README.zh.md)
 
-## 概述
+## Overview
 
-此包包含 `serverpod_auth_sms_core_server` 模块生成的客户端协议代码，用于 Flutter 应用与服务端通信。
+This package contains the client protocol code generated from `serverpod_auth_sms_core_server` module, used for Flutter app communication with the server.
 
-## 安装
+## Installation
 
-通常不需要直接安装此包。当你在 Flutter 项目中使用 `gen_client` 生成客户端代码时，如果服务端依赖了 `serverpod_auth_sms_core_server`，此包会自动作为传递依赖被引入。
+You typically don't need to install this package directly. When generating client code in your Flutter project using `gen_client`, if the server depends on `serverpod_auth_sms_core_server`, this package will be automatically included as a transitive dependency.
 
-如需手动安装：
+For manual installation:
 
 ```yaml
 dependencies:
   serverpod_auth_sms_core_client: ^0.1.0
 ```
 
-## 导出内容
+## Exports
 
-此包导出以下类型：
+This package exports the following types:
 
-### 异常类
-- `SmsAccountRequestException` - 注册请求异常
-- `SmsAccountRequestExceptionReason` - 注册请求异常原因枚举
-- `SmsLoginException` - 登录异常
-- `SmsLoginExceptionReason` - 登录异常原因枚举
-- `SmsPhoneBindException` - 手机绑定异常
-- `SmsPhoneBindExceptionReason` - 手机绑定异常原因枚举
+### Exceptions
+- `SmsAccountRequestException` - Registration request exception
+- `SmsAccountRequestExceptionReason` - Registration exception reason enum
+- `SmsLoginException` - Login exception
+- `SmsLoginExceptionReason` - Login exception reason enum
+- `SmsPhoneBindException` - Phone binding exception
+- `SmsPhoneBindExceptionReason` - Phone binding exception reason enum
 
-### 数据模型
-- `SmsVerifyLoginResult` - 登录验证码验证结果（包含 `token` 和 `needsPassword`）
-- `SmsSamePasswordBanter` - 密码未变更提示配置
+### Data Models
+- `SmsVerifyLoginResult` - Login verification result (contains `token` and `needsPassword`)
+- `SmsSamePasswordBanter` - Password unchanged hint configuration
 
-## 前端使用示例
+## Frontend Usage Example
 
-### 处理登录验证码验证结果
+### Handling Login Verification Result
 
-`verifyLoginCode` 返回 `SmsVerifyLoginResult`，包含 `needsPassword` 字段指示是否需要设置密码（新用户自动注册时）：
+`verifyLoginCode` returns `SmsVerifyLoginResult`, with `needsPassword` indicating whether a password is required (for auto-registration of new users):
 
 ```dart
 final result = await client.smsIdp.verifyLoginCode(
@@ -50,10 +50,10 @@ final result = await client.smsIdp.verifyLoginCode(
 );
 
 if (result.needsPassword) {
-  // 新用户 - 显示密码输入界面
+  // New user - show password input dialog
   showPasswordDialog();
 } else {
-  // 已有用户 - 直接完成登录
+  // Existing user - complete login directly
   final authResult = await client.smsIdp.finishLogin(
     loginToken: result.token,
     phone: phone,
@@ -62,12 +62,12 @@ if (result.needsPassword) {
 }
 ```
 
-## 相关包
+## Related Packages
 
-- [serverpod_auth_sms_core_server](https://pub.dev/packages/serverpod_auth_sms_core_server) - 服务端核心模块
-- [serverpod_auth_sms_hash_client](https://pub.dev/packages/serverpod_auth_sms_hash_client) - 哈希存储客户端
-- [serverpod_auth_sms_crypto_client](https://pub.dev/packages/serverpod_auth_sms_crypto_client) - 加密存储客户端
+- [serverpod_auth_sms_core_server](https://pub.dev/packages/serverpod_auth_sms_core_server) - Server-side core module
+- [serverpod_auth_sms_hash_client](https://pub.dev/packages/serverpod_auth_sms_hash_client) - Hash storage client
+- [serverpod_auth_sms_crypto_client](https://pub.dev/packages/serverpod_auth_sms_crypto_client) - Crypto storage client
 
-## 许可证
+## License
 
 MIT License

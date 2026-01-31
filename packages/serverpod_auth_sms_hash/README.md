@@ -2,26 +2,26 @@
 
 [![pub package](https://img.shields.io/pub/v/serverpod_auth_sms_hash_server.svg)](https://pub.dev/packages/serverpod_auth_sms_hash_server)
 
-Serverpod 短信认证手机号哈希存储实现（服务端）。
+Hash-based phone number storage implementation for Serverpod SMS authentication (server-side).
 
-[English](README.en.md)
+[中文文档](README.zh.md)
 
-## 功能特性
+## Features
 
-- **不可逆存储** - 使用 HMAC-SHA256 哈希手机号，无法还原原始号码
-- **隐私保护** - 即使数据库泄露，也无法获取用户真实手机号
-- **唯一索引** - 通过哈希值确保手机号唯一性
-- **合规友好** - 适合对个人信息保护有严格要求的场景
+- **Irreversible Storage** - Uses HMAC-SHA256 to hash phone numbers, cannot be reversed
+- **Privacy Protection** - Original phone numbers cannot be retrieved even if database is compromised
+- **Unique Index** - Ensures phone number uniqueness through hash values
+- **Compliance Friendly** - Suitable for applications with strict personal data protection requirements
 
-## 适用场景
+## Use Cases
 
-- 仅需要验证用户身份，不需要获取原始手机号
-- 对数据安全和隐私保护有较高要求
-- 符合最小化数据收集原则的应用
+- Only need to verify user identity, no need to retrieve original phone number
+- High requirements for data security and privacy protection
+- Applications following data minimization principles
 
-## 安装
+## Installation
 
-服务端：
+Server:
 ```yaml
 # gen_server/pubspec.yaml
 dependencies:
@@ -29,7 +29,7 @@ dependencies:
   serverpod_auth_sms_core_server: ^0.1.0
 ```
 
-客户端：
+Client:
 ```yaml
 # gen_client/pubspec.yaml
 dependencies:
@@ -37,57 +37,57 @@ dependencies:
   serverpod_auth_sms_core_client: ^0.1.0
 ```
 
-## 数据库迁移
+## Database Migration
 
-添加依赖后，需要创建数据库迁移：
+After adding the dependency, create database migrations:
 
 ```bash
 cd your_server_project
 serverpod create-migration
 ```
 
-## 使用方法
+## Usage
 
-### 1. 配置密钥
+### 1. Configure Secrets
 
-在 `config/passwords.yaml` 中添加：
+Add to `config/passwords.yaml`:
 
 ```yaml
 shared:
-  phoneHashPepper: '你的手机号哈希密钥-请使用强随机字符串'
+  phoneHashPepper: 'your-phone-hash-pepper-use-strong-random-string'
 ```
 
-> **重要**: 密钥一旦设置后**不可更改**，否则将无法匹配已有用户的手机号。
+> **Important**: The pepper **cannot be changed** once set, otherwise existing users' phone numbers will not match.
 
-### 2. 创建存储实例
+### 2. Create Storage Instance
 
 ```dart
 import 'package:serverpod_auth_sms_hash_server/serverpod_auth_sms_hash_server.dart'
-    hide Protocol, Endpoints;  // 避免命名冲突
+    hide Protocol, Endpoints;  // Avoid naming conflicts
 
-// 从配置文件加载
+// Load from config file
 final phoneIdStore = PhoneIdHashStore.fromPasswords(pod);
 
-// 或手动创建
+// Or create manually
 final phoneIdStore = PhoneIdHashStore(pepper: 'your-secret-pepper');
 ```
 
-### 3. 配置到认证服务
+### 3. Configure Authentication Service
 
 ```dart
 pod.initializeAuthServices(
   identityProviderBuilders: [
     SmsIdpConfigFromPasswords(
       phoneIdStore: phoneIdStore,
-      // ... 其他配置
+      // ... other configurations
     ),
   ],
 );
 ```
 
-## 数据库表
+## Database Table
 
-本模块会创建以下数据库表：
+This module creates the following database table:
 
 ```sql
 CREATE TABLE serverpod_auth_sms_phone_id_hash (
@@ -97,28 +97,28 @@ CREATE TABLE serverpod_auth_sms_phone_id_hash (
 );
 ```
 
-## 存储格式
+## Storage Format
 
-| 字段 | 说明 |
-|------|------|
-| `authUserId` | 关联的用户 ID |
-| `phoneHash` | HMAC-SHA256(手机号, pepper) 的十六进制字符串 |
+| Field | Description |
+|-------|-------------|
+| `authUserId` | Associated user ID |
+| `phoneHash` | Hex string of HMAC-SHA256(phone, pepper) |
 
-## 与 Crypto 存储的对比
+## Comparison with Crypto Storage
 
-| 特性 | Hash 存储 | Crypto 存储 |
-|------|-----------|-------------|
-| 可逆性 | 不可逆 | 可解密 |
-| 存储空间 | 较小（仅哈希） | 较大（哈希+密文+nonce+mac） |
-| 安全性 | 更高（无法还原） | 高（需保护密钥） |
-| 适用场景 | 身份验证 | 需要获取原号码 |
+| Feature | Hash Storage | Crypto Storage |
+|---------|--------------|----------------|
+| Reversibility | Irreversible | Decryptable |
+| Storage Space | Smaller (hash only) | Larger (hash+ciphertext+nonce+mac) |
+| Security | Higher (cannot reverse) | High (requires key protection) |
+| Use Case | Identity verification | Need original number |
 
-## 相关包
+## Related Packages
 
-- [serverpod_auth_sms_core_server](https://pub.dev/packages/serverpod_auth_sms_core_server) - 核心模块
-- [serverpod_auth_sms_crypto_server](https://pub.dev/packages/serverpod_auth_sms_crypto_server) - 加密存储实现
-- [serverpod_auth_sms](https://pub.dev/packages/serverpod_auth_sms) - 组合包
+- [serverpod_auth_sms_core_server](https://pub.dev/packages/serverpod_auth_sms_core_server) - Core module
+- [serverpod_auth_sms_crypto_server](https://pub.dev/packages/serverpod_auth_sms_crypto_server) - Crypto storage implementation
+- [serverpod_auth_sms](https://pub.dev/packages/serverpod_auth_sms) - Combined package
 
-## 许可证
+## License
 
 MIT License

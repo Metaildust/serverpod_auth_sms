@@ -2,41 +2,41 @@
 
 [![pub package](https://img.shields.io/pub/v/serverpod_auth_sms.svg)](https://pub.dev/packages/serverpod_auth_sms)
 
-Serverpod 短信认证组合包，重新导出所有 SMS 认证相关模块。
+Combined package for Serverpod SMS authentication, re-exporting all SMS auth modules.
 
-[English](README.en.md)
+[中文文档](README.zh.md)
 
-## 概述
+## Overview
 
-这是一个便捷的组合包，包含了 Serverpod 短信认证的所有服务端模块：
+This is a convenience package that includes all server-side modules for Serverpod SMS authentication:
 
-- `serverpod_auth_sms_core_server` - 核心认证逻辑
-- `serverpod_auth_sms_hash_server` - 哈希存储实现
-- `serverpod_auth_sms_crypto_server` - 加密存储实现
+- `serverpod_auth_sms_core_server` - Core authentication logic
+- `serverpod_auth_sms_hash_server` - Hash storage implementation
+- `serverpod_auth_sms_crypto_server` - Crypto storage implementation
 
-## 安装
+## Installation
 
 ```yaml
 dependencies:
   serverpod_auth_sms: ^0.1.0
 ```
 
-## 数据库迁移
+## Database Migration
 
-添加依赖后，需要创建数据库迁移来生成必要的表：
+After adding the dependency, create database migrations to generate the required tables:
 
 ```bash
 cd your_server_project
 serverpod create-migration
 ```
 
-然后启动服务器时应用迁移：
+Then apply migrations when starting the server:
 
 ```bash
 dart bin/main.dart --apply-migrations
 ```
 
-## 快速开始
+## Quick Start
 
 ```dart
 import 'package:serverpod_auth_sms/serverpod_auth_sms.dart';
@@ -44,9 +44,9 @@ import 'package:serverpod_auth_sms/serverpod_auth_sms.dart';
 void run(List<String> args) async {
   final pod = Serverpod(args, Protocol(), Endpoints());
 
-  // 选择存储方式（二选一）
-  final phoneIdStore = PhoneIdCryptoStore.fromPasswords(pod);  // 可解密
-  // final phoneIdStore = PhoneIdHashStore.fromPasswords(pod); // 不可逆
+  // Choose storage method (pick one)
+  final phoneIdStore = PhoneIdCryptoStore.fromPasswords(pod);  // Decryptable
+  // final phoneIdStore = PhoneIdHashStore.fromPasswords(pod); // Irreversible
 
   pod.initializeAuthServices(
     tokenManagerBuilders: [JwtConfigFromPasswords()],
@@ -65,22 +65,22 @@ void run(List<String> args) async {
 }
 ```
 
-## 功能特性
+## Features
 
-### 核心功能（来自 core）
-- 短信注册
-- 验证码登录（`verifyLoginCode` 返回 `SmsVerifyLoginResult`，包含 `needsPassword` 指示是否需要设置密码）
-- 手机号绑定
-- 自动注册登录（未注册用户可通过验证码登录并自动创建账号）
-- **短信服务商无关** - 通过回调函数支持任意短信服务商
+### Core Features (from core)
+- SMS registration
+- Verification code login (`verifyLoginCode` returns `SmsVerifyLoginResult` with `needsPassword` indicating if password setup is required)
+- Phone number binding
+- Auto-register on login (unregistered users can login with verification code and auto-create account)
+- **Provider-Agnostic** - Support any SMS provider via callbacks
 
-### 存储选项
-- **Hash 存储** - 不可逆哈希，适合隐私保护
-- **Crypto 存储** - 可解密存储，适合需要获取原号码的场景
+### Storage Options
+- **Hash Storage** - Irreversible hash, for privacy protection
+- **Crypto Storage** - Decryptable storage, for scenarios requiring original number
 
-## 中国用户推荐
+## For Chinese Users
 
-对于中国大陆用户，推荐配合 [tencent_sms_serverpod](https://pub.dev/packages/tencent_sms_serverpod) 包使用，快速集成腾讯云短信：
+For users in mainland China, we recommend using [tencent_sms_serverpod](https://pub.dev/packages/tencent_sms_serverpod) for quick Tencent Cloud SMS integration:
 
 ```yaml
 dependencies:
@@ -95,7 +95,7 @@ import 'package:tencent_sms_serverpod/tencent_sms_serverpod.dart';
 void run(List<String> args) async {
   final pod = Serverpod(args, Protocol(), Endpoints());
 
-  // 创建腾讯云短信客户端
+  // Create Tencent Cloud SMS client
   final smsConfig = TencentSmsConfigServerpod.fromServerpod(pod);
   final smsClient = TencentSmsClient(smsConfig);
   final smsHelper = SmsAuthCallbackHelper(smsClient);
@@ -118,43 +118,43 @@ void run(List<String> args) async {
 }
 ```
 
-详细信息请参阅 [serverpod_auth_sms_core 文档](https://pub.dev/packages/serverpod_auth_sms_core_server)。
+See [serverpod_auth_sms_core documentation](https://pub.dev/packages/serverpod_auth_sms_core_server) for details.
 
-## 配置
+## Configuration
 
-在 `config/passwords.yaml` 中添加：
+Add to `config/passwords.yaml`:
 
 ```yaml
 shared:
-  smsSecretHashPepper: '验证码哈希密钥'
-  phoneHashPepper: '手机号哈希密钥'
-  phoneEncryptionKey: 'AES密钥（仅Crypto需要）'
+  smsSecretHashPepper: 'verification-code-hash-pepper'
+  phoneHashPepper: 'phone-hash-pepper'
+  phoneEncryptionKey: 'AES-key (Crypto only)'
 ```
 
-## 模块详情
+## Module Details
 
-如需了解各模块的详细信息，请参阅：
+For detailed information about each module, see:
 
-- [serverpod_auth_sms_core_server](https://pub.dev/packages/serverpod_auth_sms_core_server) - 核心模块文档
-- [serverpod_auth_sms_hash_server](https://pub.dev/packages/serverpod_auth_sms_hash_server) - 哈希存储文档
-- [serverpod_auth_sms_crypto_server](https://pub.dev/packages/serverpod_auth_sms_crypto_server) - 加密存储文档
+- [serverpod_auth_sms_core_server](https://pub.dev/packages/serverpod_auth_sms_core_server) - Core module docs
+- [serverpod_auth_sms_hash_server](https://pub.dev/packages/serverpod_auth_sms_hash_server) - Hash storage docs
+- [serverpod_auth_sms_crypto_server](https://pub.dev/packages/serverpod_auth_sms_crypto_server) - Crypto storage docs
 
-## 单独引用
+## Individual Dependencies
 
-如果你只需要部分功能，可以单独引用各模块而不使用此组合包：
+If you only need partial functionality, you can depend on individual modules instead of this combined package:
 
 ```yaml
 dependencies:
-  # 仅使用核心 + 哈希存储
+  # Use core + hash storage only
   serverpod_auth_sms_core_server: ^0.1.0
   serverpod_auth_sms_hash_server: ^0.1.0
 
-  # 或仅使用核心 + 加密存储
+  # Or use core + crypto storage only
   # serverpod_auth_sms_core_server: ^0.1.0
   # serverpod_auth_sms_crypto_server: ^0.1.0
 ```
 
-> **注意**：单独引用子模块时，需要在导入时 hide 掉 `Protocol` 和 `Endpoints` 以避免命名冲突：
+> **Note**: When importing individual modules, you need to hide `Protocol` and `Endpoints` to avoid naming conflicts:
 >
 > ```dart
 > import 'package:serverpod_auth_sms_core_server/serverpod_auth_sms_core_server.dart'
@@ -163,18 +163,18 @@ dependencies:
 >     hide Protocol, Endpoints;
 > ```
 
-## 客户端依赖
+## Client Dependencies
 
-如果使用 `hash` 或 `crypto` 存储模块，客户端项目 (`*_client`) 也需要添加对应的依赖：
+If using `hash` or `crypto` storage modules, the client project (`*_client`) also needs the corresponding dependencies:
 
 ```yaml
 # gen_client/pubspec.yaml
 dependencies:
   serverpod_auth_sms_core_client: ^0.1.0
-  serverpod_auth_sms_hash_client: ^0.1.0   # 如果使用 hash 存储
-  serverpod_auth_sms_crypto_client: ^0.1.0 # 如果使用 crypto 存储
+  serverpod_auth_sms_hash_client: ^0.1.0   # If using hash storage
+  serverpod_auth_sms_crypto_client: ^0.1.0 # If using crypto storage
 ```
 
-## 许可证
+## License
 
 MIT License

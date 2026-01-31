@@ -2,26 +2,26 @@
 
 [![pub package](https://img.shields.io/pub/v/serverpod_auth_sms_crypto_server.svg)](https://pub.dev/packages/serverpod_auth_sms_crypto_server)
 
-Serverpod 短信认证手机号加密存储实现（服务端）。
+Encrypted phone number storage implementation for Serverpod SMS authentication (server-side).
 
-[English](README.en.md)
+[中文文档](README.zh.md)
 
-## 功能特性
+## Features
 
-- **可逆加密** - 使用 AES-256-GCM 加密手机号，可安全解密
-- **双重索引** - 同时存储哈希值（用于查找）和加密值（用于解密）
-- **完整性验证** - GCM 模式提供认证加密，防止数据篡改
-- **密钥管理** - 支持从配置文件安全加载密钥
+- **Reversible Encryption** - Uses AES-256-GCM to encrypt phone numbers, safely decryptable
+- **Dual Indexing** - Stores both hash (for lookup) and encrypted value (for decryption)
+- **Integrity Verification** - GCM mode provides authenticated encryption, prevents tampering
+- **Key Management** - Supports secure key loading from configuration files
 
-## 适用场景
+## Use Cases
 
-- 需要获取用户原始手机号的业务场景（如客服联系、订单通知）
-- 需要向用户展示部分手机号的场景（如 138****1234）
-- 数据分析需要对手机号进行脱敏处理的场景
+- Business scenarios requiring original phone numbers (e.g., customer support, order notifications)
+- Scenarios displaying partial phone numbers to users (e.g., 138****1234)
+- Data analysis requiring phone number anonymization
 
-## 安装
+## Installation
 
-服务端：
+Server:
 ```yaml
 # gen_server/pubspec.yaml
 dependencies:
@@ -29,7 +29,7 @@ dependencies:
   serverpod_auth_sms_core_server: ^0.1.0
 ```
 
-客户端：
+Client:
 ```yaml
 # gen_client/pubspec.yaml
 dependencies:
@@ -37,68 +37,68 @@ dependencies:
   serverpod_auth_sms_core_client: ^0.1.0
 ```
 
-## 数据库迁移
+## Database Migration
 
-添加依赖后，需要创建数据库迁移：
+After adding the dependency, create database migrations:
 
 ```bash
 cd your_server_project
 serverpod create-migration
 ```
 
-## 使用方法
+## Usage
 
-### 1. 生成加密密钥
+### 1. Generate Encryption Key
 
 ```bash
-# 生成 32 字节随机密钥并 Base64 编码
+# Generate 32-byte random key and Base64 encode
 openssl rand -base64 32
 ```
 
-### 2. 配置密钥
+### 2. Configure Secrets
 
-在 `config/passwords.yaml` 中添加：
+Add to `config/passwords.yaml`:
 
 ```yaml
 shared:
-  phoneHashPepper: '你的手机号哈希密钥'
-  phoneEncryptionKey: 'Base64编码的32字节AES密钥'
+  phoneHashPepper: 'your-phone-hash-pepper'
+  phoneEncryptionKey: 'base64-encoded-32-byte-AES-key'
 ```
 
-> **重要**:
-> - 密钥一旦设置后**不可更改**
-> - 密钥必须严格保密，泄露将导致所有手机号可被解密
-> - 建议使用 HSM 或密钥管理服务保护密钥
+> **Important**:
+> - Keys **cannot be changed** once set
+> - Keys must be kept strictly confidential; leakage allows decryption of all phone numbers
+> - Consider using HSM or key management service to protect keys
 
-### 3. 创建存储实例
+### 3. Create Storage Instance
 
 ```dart
 import 'package:serverpod_auth_sms_crypto_server/serverpod_auth_sms_crypto_server.dart'
-    hide Protocol, Endpoints;  // 避免命名冲突
+    hide Protocol, Endpoints;  // Avoid naming conflicts
 
-// 从配置文件加载
+// Load from config file
 final phoneIdStore = PhoneIdCryptoStore.fromPasswords(pod);
 
-// 或手动创建
+// Or create manually
 final phoneIdStore = PhoneIdCryptoStore(
   pepper: 'your-hash-pepper',
   encryptionKeyBytes: base64Decode('your-base64-key'),
 );
 ```
 
-### 4. 获取原始手机号
+### 4. Retrieve Original Phone Number
 
 ```dart
-// 通过用户 ID 获取解密后的手机号
+// Get decrypted phone number by user ID
 final phone = await phoneIdStore.getPhone(
   session,
   authUserId: userId,
 );
 ```
 
-## 数据库表
+## Database Table
 
-本模块会创建以下数据库表：
+This module creates the following database table:
 
 ```sql
 CREATE TABLE serverpod_auth_sms_phone_id_crypto (
@@ -111,38 +111,38 @@ CREATE TABLE serverpod_auth_sms_phone_id_crypto (
 );
 ```
 
-## 存储格式
+## Storage Format
 
-| 字段 | 说明 |
-|------|------|
-| `authUserId` | 关联的用户 ID |
-| `phoneHash` | HMAC-SHA256 哈希值（用于唯一索引） |
-| `phoneEncrypted` | AES-256-GCM 加密的手机号密文 |
-| `nonce` | 加密随机数（12 字节） |
-| `mac` | 消息认证码（16 字节） |
+| Field | Description |
+|-------|-------------|
+| `authUserId` | Associated user ID |
+| `phoneHash` | HMAC-SHA256 hash (for unique index) |
+| `phoneEncrypted` | AES-256-GCM encrypted phone ciphertext |
+| `nonce` | Encryption nonce (12 bytes) |
+| `mac` | Message Authentication Code (16 bytes) |
 
-## 安全注意事项
+## Security Considerations
 
-1. **密钥保护** - 加密密钥是最关键的安全要素，必须妥善保护
-2. **访问控制** - 限制 `getPhone()` 方法的调用权限
-3. **审计日志** - 记录所有解密操作以便安全审计
-4. **合规要求** - 确保符合当地数据保护法规的加密要求
+1. **Key Protection** - Encryption key is the most critical security element
+2. **Access Control** - Restrict access to `getPhone()` method
+3. **Audit Logging** - Log all decryption operations for security audit
+4. **Compliance** - Ensure compliance with local data protection regulations
 
-## 与 Hash 存储的对比
+## Comparison with Hash Storage
 
-| 特性 | Crypto 存储 | Hash 存储 |
-|------|-------------|-----------|
-| 可逆性 | 可解密 | 不可逆 |
-| 存储空间 | 较大 | 较小 |
-| 功能 | 可获取原号码 | 仅能验证 |
-| 密钥依赖 | 需要加密密钥 | 仅需哈希密钥 |
+| Feature | Crypto Storage | Hash Storage |
+|---------|----------------|--------------|
+| Reversibility | Decryptable | Irreversible |
+| Storage Space | Larger | Smaller |
+| Functionality | Can retrieve original | Verification only |
+| Key Dependency | Needs encryption key | Hash pepper only |
 
-## 相关包
+## Related Packages
 
-- [serverpod_auth_sms_core_server](https://pub.dev/packages/serverpod_auth_sms_core_server) - 核心模块
-- [serverpod_auth_sms_hash_server](https://pub.dev/packages/serverpod_auth_sms_hash_server) - 哈希存储实现
-- [serverpod_auth_sms](https://pub.dev/packages/serverpod_auth_sms) - 组合包
+- [serverpod_auth_sms_core_server](https://pub.dev/packages/serverpod_auth_sms_core_server) - Core module
+- [serverpod_auth_sms_hash_server](https://pub.dev/packages/serverpod_auth_sms_hash_server) - Hash storage implementation
+- [serverpod_auth_sms](https://pub.dev/packages/serverpod_auth_sms) - Combined package
 
-## 许可证
+## License
 
 MIT License
