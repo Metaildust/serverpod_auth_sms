@@ -25,16 +25,16 @@ Serverpod 短信认证手机号加密存储实现（服务端）。
 ```yaml
 # gen_server/pubspec.yaml
 dependencies:
-  serverpod_auth_sms_crypto_server: ^0.1.0
-  serverpod_auth_sms_core_server: ^0.1.0
+  serverpod_auth_sms_crypto_server: ^0.1.1
+  serverpod_auth_sms_core_server: ^0.1.1
 ```
 
 客户端：
 ```yaml
 # gen_client/pubspec.yaml
 dependencies:
-  serverpod_auth_sms_crypto_client: ^0.1.0
-  serverpod_auth_sms_core_client: ^0.1.0
+  serverpod_auth_sms_crypto_client: ^0.1.1
+  serverpod_auth_sms_core_client: ^0.1.1
 ```
 
 ## 数据库迁移

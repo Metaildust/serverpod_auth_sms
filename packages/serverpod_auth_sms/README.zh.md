@@ -18,7 +18,7 @@ Serverpod 短信认证组合包，重新导出所有 SMS 认证相关模块。
 
 ```yaml
 dependencies:
-  serverpod_auth_sms: ^0.1.0
+  serverpod_auth_sms: ^0.1.1
 ```
 
 ## 数据库迁移
@@ -84,7 +84,7 @@ void run(List<String> args) async {
 
 ```yaml
 dependencies:
-  serverpod_auth_sms: ^0.1.0
+  serverpod_auth_sms: ^0.1.1
   tencent_sms_serverpod: ^0.1.0
 ```
 
@@ -146,12 +146,12 @@ shared:
 ```yaml
 dependencies:
   # 仅使用核心 + 哈希存储
-  serverpod_auth_sms_core_server: ^0.1.0
-  serverpod_auth_sms_hash_server: ^0.1.0
+  serverpod_auth_sms_core_server: ^0.1.1
+  serverpod_auth_sms_hash_server: ^0.1.1
 
   # 或仅使用核心 + 加密存储
-  # serverpod_auth_sms_core_server: ^0.1.0
-  # serverpod_auth_sms_crypto_server: ^0.1.0
+  # serverpod_auth_sms_core_server: ^0.1.1
+  # serverpod_auth_sms_crypto_server: ^0.1.1
 ```
 
 > **注意**：单独引用子模块时，需要在导入时 hide 掉 `Protocol` 和 `Endpoints` 以避免命名冲突：
@@ -170,9 +170,9 @@ dependencies:
 ```yaml
 # gen_client/pubspec.yaml
 dependencies:
-  serverpod_auth_sms_core_client: ^0.1.0
-  serverpod_auth_sms_hash_client: ^0.1.0   # 如果使用 hash 存储
-  serverpod_auth_sms_crypto_client: ^0.1.0 # 如果使用 crypto 存储
+  serverpod_auth_sms_core_client: ^0.1.1
+  serverpod_auth_sms_hash_client: ^0.1.1   # 如果使用 hash 存储
+  serverpod_auth_sms_crypto_client: ^0.1.1 # 如果使用 crypto 存储
 ```
 
 ## 许可证

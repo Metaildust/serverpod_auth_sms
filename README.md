@@ -32,7 +32,7 @@ Serverpod SMS authentication module - SMS registration, verification code login,
 
 ```yaml
 dependencies:
-  serverpod_auth_sms: ^0.1.0
+  serverpod_auth_sms: ^0.1.1
 ```
 
 ```dart

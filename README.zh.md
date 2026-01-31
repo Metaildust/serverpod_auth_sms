@@ -32,7 +32,7 @@ Serverpod 短信认证模块 - 支持短信注册、验证码登录和手机号�
 
 ```yaml
 dependencies:
-  serverpod_auth_sms: ^0.1.0
+  serverpod_auth_sms: ^0.1.1
 ```
 
 ```dart

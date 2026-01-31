@@ -18,7 +18,7 @@ This is a convenience package that includes all server-side modules for Serverpo
 
 ```yaml
 dependencies:
-  serverpod_auth_sms: ^0.1.0
+  serverpod_auth_sms: ^0.1.1
 ```
 
 ## Database Migration
@@ -84,7 +84,7 @@ For users in mainland China, we recommend using [tencent_sms_serverpod](https://
 
 ```yaml
 dependencies:
-  serverpod_auth_sms: ^0.1.0
+  serverpod_auth_sms: ^0.1.1
   tencent_sms_serverpod: ^0.1.0
 ```
 
@@ -146,12 +146,12 @@ If you only need partial functionality, you can depend on individual modules ins
 ```yaml
 dependencies:
   # Use core + hash storage only
-  serverpod_auth_sms_core_server: ^0.1.0
-  serverpod_auth_sms_hash_server: ^0.1.0
+  serverpod_auth_sms_core_server: ^0.1.1
+  serverpod_auth_sms_hash_server: ^0.1.1
 
   # Or use core + crypto storage only
-  # serverpod_auth_sms_core_server: ^0.1.0
-  # serverpod_auth_sms_crypto_server: ^0.1.0
+  # serverpod_auth_sms_core_server: ^0.1.1
+  # serverpod_auth_sms_crypto_server: ^0.1.1
 ```
 
 > **Note**: When importing individual modules, you need to hide `Protocol` and `Endpoints` to avoid naming conflicts:
@@ -170,9 +170,9 @@ If using `hash` or `crypto` storage modules, the client project (`*_client`) als
 ```yaml
 # gen_client/pubspec.yaml
 dependencies:
-  serverpod_auth_sms_core_client: ^0.1.0
-  serverpod_auth_sms_hash_client: ^0.1.0   # If using hash storage
-  serverpod_auth_sms_crypto_client: ^0.1.0 # If using crypto storage
+  serverpod_auth_sms_core_client: ^0.1.1
+  serverpod_auth_sms_hash_client: ^0.1.1   # If using hash storage
+  serverpod_auth_sms_crypto_client: ^0.1.1 # If using crypto storage
 ```
 
 ## License

@@ -25,16 +25,16 @@ Server:
 ```yaml
 # gen_server/pubspec.yaml
 dependencies:
-  serverpod_auth_sms_hash_server: ^0.1.0
-  serverpod_auth_sms_core_server: ^0.1.0
+  serverpod_auth_sms_hash_server: ^0.1.1
+  serverpod_auth_sms_core_server: ^0.1.1
 ```
 
 Client:
 ```yaml
 # gen_client/pubspec.yaml
 dependencies:
-  serverpod_auth_sms_hash_client: ^0.1.0
-  serverpod_auth_sms_core_client: ^0.1.0
+  serverpod_auth_sms_hash_client: ^0.1.1
+  serverpod_auth_sms_core_client: ^0.1.1
 ```
 
 ## Database Migration

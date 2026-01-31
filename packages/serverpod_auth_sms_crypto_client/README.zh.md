@@ -18,7 +18,7 @@ Serverpod 短信认证加密存储模块的客户端包。
 
 ```yaml
 dependencies:
-  serverpod_auth_sms_crypto_client: ^0.1.0
+  serverpod_auth_sms_crypto_client: ^0.1.1
 ```
 
 ## 相关包

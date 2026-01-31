@@ -20,7 +20,7 @@ Serverpod 短信认证核心模块（服务端），提供短信注册、验证�
 
 ```yaml
 dependencies:
-  serverpod_auth_sms_core_server: ^0.1.0
+  serverpod_auth_sms_core_server: ^0.1.1
 ```
 
 ## 使用方法
