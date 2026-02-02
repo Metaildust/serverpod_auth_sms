@@ -2,23 +2,33 @@
 
 [![pub package](https://img.shields.io/pub/v/serverpod_auth_sms.svg)](https://pub.dev/packages/serverpod_auth_sms)
 
-**The recommended package** for Serverpod SMS authentication. This combined package re-exports all SMS auth modules with proper conflict handling - no manual `hide` required.
+**The recommended package** for Serverpod SMS authentication.
 
 [中文文档](README.zh.md)
 
 ## Why Use This Package?
 
-| Import Method | Need `hide Protocol, Endpoints`? |
-|--------------|----------------------------------|
-| `serverpod_auth_sms` (this package) | **No** ✓ |
-| Individual packages (`_core`, `_hash`, `_crypto`) | Yes |
+This package provides **complete SMS authentication functionality** with flexible storage options:
 
-This package includes:
-- `serverpod_auth_sms_core_server` - Core authentication logic
-- `serverpod_auth_sms_hash_server` - Hash-only storage (irreversible)
-- `serverpod_auth_sms_crypto_server` - Encrypted storage (decryptable)
+| What You Need | Just Use This Package |
+|---------------|----------------------|
+| Hash-only storage (irreversible) | ✅ Use `PhoneIdHashStore` |
+| Crypto storage (decryptable) | ✅ Use `PhoneIdCryptoStore` |
+| No manual `hide Protocol, Endpoints` | ✅ Handled automatically |
 
-> **Note**: The **crypto** storage internally stores hash values too, so it covers all **hash** functionality while also supporting phone number decryption. Choose crypto if you might need to retrieve original phone numbers in the future.
+**You do NOT need to import sub-packages separately.** This package includes everything and lets you choose storage method via configuration:
+
+```dart
+// Just import this one package
+import 'package:serverpod_auth_sms/serverpod_auth_sms.dart';
+
+// Then choose your storage method:
+final phoneIdStore = PhoneIdHashStore.fromPasswords(pod);   // Hash-only
+// OR
+final phoneIdStore = PhoneIdCryptoStore.fromPasswords(pod); // Crypto (recommended)
+```
+
+> **Sub-packages (`_core`, `_hash`, `_crypto`) are for advanced users only** and require manual `hide Protocol, Endpoints` directives. Most users should just use this package.
 
 ## Features
 
@@ -26,9 +36,6 @@ This package includes:
 - **Verification Code Login** - Login with phone + code (auto-register unregistered users)
 - **Phone Binding** - Bind phone to existing accounts
 - **Provider-Agnostic** - Works with any SMS provider via callbacks
-- **Two Storage Options**:
-  - **Hash**: Irreversible, maximum privacy
-  - **Crypto**: Decryptable, for scenarios needing original numbers
 
 ## Installation
 
@@ -53,9 +60,18 @@ dependencies:
   # serverpod_auth_sms_hash_client: ^0.1.2  # For hash storage
 ```
 
-## Complete Configuration
+## Quick Start
 
-### passwords.yaml
+### Step 1: Choose Storage Method
+
+| Storage | When to Use | Configuration Required |
+|---------|-------------|----------------------|
+| **Crypto** (recommended) | Most cases - can verify AND retrieve phone numbers | `phoneHashPepper` + `phoneEncryptionKey` |
+| **Hash** | Maximum privacy - can only verify, cannot retrieve | `phoneHashPepper` only |
+
+> **Note**: Crypto storage internally stores hash values too, so it covers all hash functionality while also supporting phone number decryption. If you're unsure, choose crypto - you can always verify phones (like hash), plus decrypt when needed (e.g., customer support, notifications).
+
+### Step 2: Configure passwords.yaml
 
 ```yaml
 # config/passwords.yaml
@@ -65,18 +81,17 @@ shared:
   # ============================================
   
   # Pepper for hashing verification codes (required)
-  # Used internally for secure challenge storage
   smsSecretHashPepper: 'your-random-string-for-verification-code-hashing'
   
   # ============================================
   # Phone Number Storage (Required)
   # ============================================
   
-  # Pepper for hashing phone numbers (required for both hash and crypto)
+  # Pepper for hashing phone numbers (required for BOTH hash and crypto)
   # WARNING: Cannot be changed after deployment - existing data won't match
   phoneHashPepper: 'your-random-string-for-phone-hashing'
   
-  # AES-256 encryption key for crypto storage (required only for crypto)
+  # AES-256 encryption key (required ONLY for crypto storage)
   # Generate with: openssl rand -base64 32
   # WARNING: Cannot be changed - leakage allows decryption of all phone numbers
   phoneEncryptionKey: 'base64-encoded-32-byte-key'
@@ -104,9 +119,7 @@ shared:
   # tencentSmsTemplateCsvPath: 'config/sms/templates.csv'
 ```
 
-## Quick Start
-
-### Basic Setup (Custom SMS Provider)
+### Step 3: Configure Server
 
 ```dart
 import 'package:serverpod/serverpod.dart';
@@ -116,9 +129,19 @@ import 'package:serverpod_auth_sms/serverpod_auth_sms.dart';
 void run(List<String> args) async {
   final pod = Serverpod(args, Protocol(), Endpoints());
 
-  // Choose storage method
-  final phoneIdStore = PhoneIdCryptoStore.fromPasswords(pod);  // Recommended
-  // final phoneIdStore = PhoneIdHashStore.fromPasswords(pod); // If no decryption needed
+  // ========================================
+  // Choose ONE storage method:
+  // ========================================
+  
+  // Option A: Crypto storage (RECOMMENDED)
+  // - Can verify phone numbers (like hash)
+  // - Can also decrypt to get original phone (for support, notifications, etc.)
+  final phoneIdStore = PhoneIdCryptoStore.fromPasswords(pod);
+  
+  // Option B: Hash storage
+  // - Can only verify phone numbers
+  // - Cannot retrieve original phone (maximum privacy)
+  // final phoneIdStore = PhoneIdHashStore.fromPasswords(pod);
 
   pod.initializeAuthServices(
     tokenManagerBuilders: [JwtConfigFromPasswords()],
@@ -160,7 +183,7 @@ bool _validatePassword(String password) {
 }
 ```
 
-### With Tencent Cloud SMS (Recommended for Chinese Users)
+### With Tencent Cloud SMS (for Chinese Users)
 
 ```dart
 import 'package:serverpod/serverpod.dart';
@@ -177,7 +200,7 @@ void run(List<String> args) async {
   // Use Chinese error messages: TencentSmsClient(smsConfig, localizations: const SmsLocalizationsZh())
   final smsHelper = SmsAuthCallbackHelper(smsClient);
 
-  // Use crypto storage (recommended - supports both hash and decryption)
+  // Choose storage method (see Step 1)
   final phoneIdStore = PhoneIdCryptoStore.fromPasswords(pod);
 
   pod.initializeAuthServices(
@@ -190,8 +213,8 @@ void run(List<String> args) async {
         sendBindVerificationCode: smsHelper.sendForBind,
         passwordValidationFunction: _validatePassword,
         // Optional configurations:
-        requirePasswordOnUnregisteredLogin: true,  // Require password for new users
-        allowPhoneRebind: false,                   // Prevent phone number changes
+        requirePasswordOnUnregisteredLogin: true,
+        allowPhoneRebind: false,
         verificationCodeLength: 6,
         loginVerificationCodeLifetime: Duration(minutes: 10),
       ),
@@ -202,7 +225,7 @@ void run(List<String> args) async {
 }
 ```
 
-### Create Endpoints
+### Step 4: Create Endpoints
 
 ```dart
 // lib/src/endpoints/sms_idp_endpoint.dart
@@ -278,34 +301,7 @@ SmsIdpConfigFromPasswords(
 )
 ```
 
-## Storage Comparison
-
-| Feature | Hash Storage | Crypto Storage |
-|---------|-------------|----------------|
-| Can verify phone | ✅ | ✅ |
-| Can retrieve original phone | ❌ | ✅ |
-| Storage size | Smaller | Larger |
-| Configuration | `phoneHashPepper` only | `phoneHashPepper` + `phoneEncryptionKey` |
-| Use case | Maximum privacy | Need original number (support, notifications) |
-
-> **Recommendation**: Use **crypto** storage unless you have strict data minimization requirements. It provides all hash functionality plus the ability to decrypt when needed.
-
 ## Troubleshooting
-
-### Import Conflicts (for individual package users)
-
-If using individual packages instead of this combined package:
-
-```dart
-// ❌ Wrong - causes Protocol/Endpoints conflict
-import 'package:serverpod_auth_sms_core_server/serverpod_auth_sms_core_server.dart';
-
-// ✅ Correct - hide conflicting classes
-import 'package:serverpod_auth_sms_core_server/serverpod_auth_sms_core_server.dart'
-    hide Protocol, Endpoints;
-```
-
-**Recommended**: Just use this combined package to avoid the hassle.
 
 ### Tencent Cloud Rate Limits
 
@@ -339,20 +335,23 @@ Future<void> _sendSms(Session session, {...}) async {
 }
 ```
 
-## Individual Package Usage (Not Recommended)
+## Advanced: Individual Package Usage
 
-If you must use individual packages:
+> **Not recommended for most users.** Only use if you have specific requirements.
+
+If you must use individual packages (e.g., to avoid crypto dependencies when only using hash):
 
 ```yaml
 dependencies:
   serverpod_auth_sms_core_server: ^0.1.2
-  serverpod_auth_sms_crypto_server: ^0.1.2  # Or _hash_server
+  serverpod_auth_sms_hash_server: ^0.1.2  # Or _crypto_server
 ```
 
 ```dart
+// Must manually hide Protocol and Endpoints
 import 'package:serverpod_auth_sms_core_server/serverpod_auth_sms_core_server.dart'
     hide Protocol, Endpoints;
-import 'package:serverpod_auth_sms_crypto_server/serverpod_auth_sms_crypto_server.dart'
+import 'package:serverpod_auth_sms_hash_server/serverpod_auth_sms_hash_server.dart'
     hide Protocol, Endpoints;
 ```
 
@@ -360,9 +359,6 @@ import 'package:serverpod_auth_sms_crypto_server/serverpod_auth_sms_crypto_serve
 
 - [tencent_sms](https://pub.dev/packages/tencent_sms) - Tencent Cloud SMS SDK
 - [tencent_sms_serverpod](https://pub.dev/packages/tencent_sms_serverpod) - Serverpod integration
-- [serverpod_auth_sms_core_server](https://pub.dev/packages/serverpod_auth_sms_core_server) - Core module
-- [serverpod_auth_sms_hash_server](https://pub.dev/packages/serverpod_auth_sms_hash_server) - Hash storage
-- [serverpod_auth_sms_crypto_server](https://pub.dev/packages/serverpod_auth_sms_crypto_server) - Crypto storage
 
 ## License
 

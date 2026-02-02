@@ -1,3 +1,9 @@
+## 0.1.3
+- Reorganized README to clearly show this package supports both hash and crypto storage
+- Moved storage comparison to "Step 1: Choose Storage Method" section
+- Emphasized that sub-packages are for advanced users only
+- Clarified crypto covers all hash functionality in the configuration section
+
 ## 0.1.2
 - Comprehensive README rewrite with complete configuration guide
 - Added full passwords.yaml example with all options

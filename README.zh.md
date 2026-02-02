@@ -2,23 +2,33 @@
 
 [![pub package](https://img.shields.io/pub/v/serverpod_auth_sms.svg)](https://pub.dev/packages/serverpod_auth_sms)
 
-**推荐使用的包** - Serverpod 短信认证组合包。本包已处理好命名冲突，无需手动 `hide`。
+Serverpod 短信认证**推荐使用的包**。
 
 [English](README.md)
 
 ## 为什么用这个包？
 
-| 导入方式 | 需要 `hide Protocol, Endpoints`？|
-|---------|----------------------------------|
-| `serverpod_auth_sms`（本包）| **不需要** ✓ |
-| 单独导入子包（`_core`, `_hash`, `_crypto`）| 需要 |
+本包提供**完整的短信认证功能**，支持灵活选择存储方式：
 
-本包包含：
-- `serverpod_auth_sms_core_server` - 核心认证逻辑
-- `serverpod_auth_sms_hash_server` - 哈希存储（不可逆）
-- `serverpod_auth_sms_crypto_server` - 加密存储（可解密）
+| 你的需求 | 直接用本包即可 |
+|---------|---------------|
+| 仅哈希存储（不可逆）| ✅ 使用 `PhoneIdHashStore` |
+| 加密存储（可解密）| ✅ 使用 `PhoneIdCryptoStore` |
+| 无需手动 `hide Protocol, Endpoints` | ✅ 自动处理 |
 
-> **注意**：**crypto** 存储内部也会存储 hash 值，所以它涵盖了 **hash** 的所有功能，同时还支持解密还原手机号。如果将来可能需要获取原始手机号，建议选择 crypto。
+**你不需要单独引入子包。** 本包已包含所有功能，通过配置选择存储方式即可：
+
+```dart
+// 只需导入这一个包
+import 'package:serverpod_auth_sms/serverpod_auth_sms.dart';
+
+// 然后选择存储方式：
+final phoneIdStore = PhoneIdHashStore.fromPasswords(pod);   // 仅哈希
+// 或
+final phoneIdStore = PhoneIdCryptoStore.fromPasswords(pod); // 加密（推荐）
+```
+
+> **子包（`_core`、`_hash`、`_crypto`）仅供高级用户使用**，需要手动添加 `hide Protocol, Endpoints`。大多数用户直接用本包即可。
 
 ## 功能特性
 
@@ -26,9 +36,6 @@
 - **验证码登录** - 手机号 + 验证码登录（未注册用户自动注册）
 - **手机号绑定** - 为已有账号绑定手机号
 - **服务商无关** - 通过回调函数支持任意短信服务商
-- **两种存储方案**：
-  - **Hash**：不可逆，最大隐私保护
-  - **Crypto**：可解密，适合需要获取原号码的场景
 
 ## 安装
 
@@ -53,9 +60,18 @@ dependencies:
   # serverpod_auth_sms_hash_client: ^0.1.2  # 哈希存储
 ```
 
-## 完整配置
+## 快速开始
 
-### passwords.yaml
+### 第一步：选择存储方式
+
+| 存储方式 | 适用场景 | 需要配置 |
+|---------|---------|---------|
+| **Crypto**（推荐）| 大多数情况 - 可验证也可获取手机号 | `phoneHashPepper` + `phoneEncryptionKey` |
+| **Hash** | 最大隐私保护 - 只能验证，无法获取原号 | 仅 `phoneHashPepper` |
+
+> **注意**：Crypto 存储内部也会存储哈希值，所以它涵盖了 Hash 的所有功能，同时还支持解密获取原始手机号。如果不确定，选择 Crypto - 既能验证手机号（和 Hash 一样），又能在需要时解密（如客服联系、订单通知）。
+
+### 第二步：配置 passwords.yaml
 
 ```yaml
 # config/passwords.yaml
@@ -65,18 +81,17 @@ shared:
   # ============================================
   
   # 验证码哈希密钥（必需）
-  # 用于内部安全存储验证码 challenge
   smsSecretHashPepper: '随机字符串-用于验证码哈希'
   
   # ============================================
   # 手机号存储（必需）
   # ============================================
   
-  # 手机号哈希密钥（hash 和 crypto 都需要）
+  # 手机号哈希密钥（Hash 和 Crypto 都需要）
   # ⚠️ 警告：部署后不可更改，否则已有数据无法匹配
   phoneHashPepper: '随机字符串-用于手机号哈希'
   
-  # AES-256 加密密钥（仅 crypto 存储需要）
+  # AES-256 加密密钥（仅 Crypto 存储需要）
   # 生成命令：openssl rand -base64 32
   # ⚠️ 警告：不可更改，泄露将导致所有手机号可被解密
   phoneEncryptionKey: 'base64编码的32字节密钥'
@@ -104,9 +119,7 @@ shared:
   # tencentSmsTemplateCsvPath: 'config/sms/templates.csv'
 ```
 
-## 快速开始
-
-### 基础配置（自定义短信服务商）
+### 第三步：配置服务器
 
 ```dart
 import 'package:serverpod/serverpod.dart';
@@ -116,9 +129,19 @@ import 'package:serverpod_auth_sms/serverpod_auth_sms.dart';
 void run(List<String> args) async {
   final pod = Serverpod(args, Protocol(), Endpoints());
 
-  // 选择存储方式
-  final phoneIdStore = PhoneIdCryptoStore.fromPasswords(pod);  // 推荐
-  // final phoneIdStore = PhoneIdHashStore.fromPasswords(pod); // 如果不需要解密
+  // ========================================
+  // 选择存储方式（二选一）：
+  // ========================================
+  
+  // 方案 A：Crypto 存储（推荐）
+  // - 可以验证手机号（和 Hash 一样）
+  // - 还可以解密获取原始手机号（用于客服、通知等）
+  final phoneIdStore = PhoneIdCryptoStore.fromPasswords(pod);
+  
+  // 方案 B：Hash 存储
+  // - 只能验证手机号
+  // - 无法获取原始手机号（最大隐私保护）
+  // final phoneIdStore = PhoneIdHashStore.fromPasswords(pod);
 
   pod.initializeAuthServices(
     tokenManagerBuilders: [JwtConfigFromPasswords()],
@@ -177,7 +200,7 @@ void run(List<String> args) async {
   // 使用中文错误消息：TencentSmsClient(smsConfig, localizations: const SmsLocalizationsZh())
   final smsHelper = SmsAuthCallbackHelper(smsClient);
 
-  // 使用加密存储（推荐 - 同时支持哈希验证和解密）
+  // 选择存储方式（参见第一步）
   final phoneIdStore = PhoneIdCryptoStore.fromPasswords(pod);
 
   pod.initializeAuthServices(
@@ -190,8 +213,8 @@ void run(List<String> args) async {
         sendBindVerificationCode: smsHelper.sendForBind,
         passwordValidationFunction: _validatePassword,
         // 可选配置：
-        requirePasswordOnUnregisteredLogin: true,  // 新用户需要设置密码
-        allowPhoneRebind: false,                   // 禁止更换绑定手机
+        requirePasswordOnUnregisteredLogin: true,
+        allowPhoneRebind: false,
         verificationCodeLength: 6,
         loginVerificationCodeLifetime: Duration(minutes: 10),
       ),
@@ -202,7 +225,7 @@ void run(List<String> args) async {
 }
 ```
 
-### 创建 Endpoints
+### 第四步：创建 Endpoints
 
 ```dart
 // lib/src/endpoints/sms_idp_endpoint.dart
@@ -278,34 +301,7 @@ SmsIdpConfigFromPasswords(
 )
 ```
 
-## 存储方案对比
-
-| 特性 | Hash 存储 | Crypto 存储 |
-|------|----------|-------------|
-| 可验证手机号 | ✅ | ✅ |
-| 可获取原始手机号 | ❌ | ✅ |
-| 存储空间 | 较小 | 较大 |
-| 配置项 | 仅 `phoneHashPepper` | `phoneHashPepper` + `phoneEncryptionKey` |
-| 适用场景 | 最大隐私保护 | 需要原号码（客服、通知） |
-
-> **建议**：除非有严格的数据最小化要求，否则推荐使用 **crypto** 存储。它提供了 hash 的所有功能，还能在需要时解密。
-
 ## 常见问题
-
-### 导入冲突（单独使用子包时）
-
-如果使用单独的子包而不是本组合包：
-
-```dart
-// ❌ 错误 - 会导致 Protocol/Endpoints 冲突
-import 'package:serverpod_auth_sms_core_server/serverpod_auth_sms_core_server.dart';
-
-// ✅ 正确 - 隐藏冲突的类
-import 'package:serverpod_auth_sms_core_server/serverpod_auth_sms_core_server.dart'
-    hide Protocol, Endpoints;
-```
-
-**建议**：直接使用本组合包，省去麻烦。
 
 ### 腾讯云频率限制
 
@@ -339,20 +335,23 @@ Future<void> _sendSms(Session session, {...}) async {
 }
 ```
 
-## 单独使用子包（不推荐）
+## 高级：单独使用子包
 
-如果必须使用单独的子包：
+> **不推荐大多数用户使用。** 仅在有特殊需求时使用。
+
+如果必须使用单独的子包（例如只用 hash 且想避免 crypto 依赖）：
 
 ```yaml
 dependencies:
   serverpod_auth_sms_core_server: ^0.1.2
-  serverpod_auth_sms_crypto_server: ^0.1.2  # 或 _hash_server
+  serverpod_auth_sms_hash_server: ^0.1.2  # 或 _crypto_server
 ```
 
 ```dart
+// 必须手动 hide Protocol 和 Endpoints
 import 'package:serverpod_auth_sms_core_server/serverpod_auth_sms_core_server.dart'
     hide Protocol, Endpoints;
-import 'package:serverpod_auth_sms_crypto_server/serverpod_auth_sms_crypto_server.dart'
+import 'package:serverpod_auth_sms_hash_server/serverpod_auth_sms_hash_server.dart'
     hide Protocol, Endpoints;
 ```
 
@@ -360,9 +359,6 @@ import 'package:serverpod_auth_sms_crypto_server/serverpod_auth_sms_crypto_serve
 
 - [tencent_sms](https://pub.dev/packages/tencent_sms) - 腾讯云短信 SDK
 - [tencent_sms_serverpod](https://pub.dev/packages/tencent_sms_serverpod) - Serverpod 集成
-- [serverpod_auth_sms_core_server](https://pub.dev/packages/serverpod_auth_sms_core_server) - 核心模块
-- [serverpod_auth_sms_hash_server](https://pub.dev/packages/serverpod_auth_sms_hash_server) - Hash 存储
-- [serverpod_auth_sms_crypto_server](https://pub.dev/packages/serverpod_auth_sms_crypto_server) - Crypto 存储
 
 ## 许可证
 
