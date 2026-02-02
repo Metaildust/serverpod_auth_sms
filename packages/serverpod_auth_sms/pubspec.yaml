@@ -1,6 +1,6 @@
 name: serverpod_auth_sms
 description: Combined SMS auth package for Serverpod.
-version: 0.1.3
+version: 0.1.4
 repository: https://github.com/Metaildust/serverpod_auth_sms
 homepage: https://pub.dev/packages/serverpod_auth_sms
 

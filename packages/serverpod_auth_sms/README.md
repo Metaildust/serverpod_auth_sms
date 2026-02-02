@@ -45,7 +45,7 @@ final phoneIdStore = PhoneIdCryptoStore.fromPasswords(pod); // Crypto (recommend
 # gen_server/pubspec.yaml
 dependencies:
   serverpod_auth_sms: ^0.1.2
-  # Optional: Tencent Cloud SMS integration
+  # Optional: Tencent Cloud SMS integration (for China business)
   tencent_sms_serverpod: ^0.1.0
 ```
 
@@ -97,7 +97,7 @@ shared:
   phoneEncryptionKey: 'base64-encoded-32-byte-key'
   
   # ============================================
-  # Tencent Cloud SMS (Optional - for Chinese users)
+  # Tencent Cloud SMS (Optional - for China business)
   # ============================================
   
   tencentSmsSecretId: 'your-tencent-secret-id'
@@ -183,7 +183,7 @@ bool _validatePassword(String password) {
 }
 ```
 
-### With Tencent Cloud SMS (for Chinese Users)
+### With Tencent Cloud SMS (for China Business)
 
 ```dart
 import 'package:serverpod/serverpod.dart';

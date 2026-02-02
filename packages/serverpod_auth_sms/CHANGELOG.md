@@ -1,3 +1,6 @@
+## 0.1.4
+- Clarify Tencent Cloud SMS is for China business
+
 ## 0.1.3
 - Reorganized README to clearly show this package supports both hash and crypto storage
 - Moved storage comparison to "Step 1: Choose Storage Method" section

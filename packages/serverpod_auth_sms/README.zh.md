@@ -45,7 +45,7 @@ final phoneIdStore = PhoneIdCryptoStore.fromPasswords(pod); // 加密（推荐�
 # gen_server/pubspec.yaml
 dependencies:
   serverpod_auth_sms: ^0.1.2
-  # 可选：腾讯云短信集成
+  # 可选：腾讯云短信集成（中国业务）
   tencent_sms_serverpod: ^0.1.0
 ```
 
@@ -97,7 +97,7 @@ shared:
   phoneEncryptionKey: 'base64编码的32字节密钥'
   
   # ============================================
-  # 腾讯云短信（可选 - 中国用户推荐）
+  # 腾讯云短信（可选 - 中国业务）
   # ============================================
   
   tencentSmsSecretId: '你的腾讯云SecretId'
@@ -183,7 +183,7 @@ bool _validatePassword(String password) {
 }
 ```
 
-### 使用腾讯云短信（中国用户推荐）
+### 使用腾讯云短信（中国业务）
 
 ```dart
 import 'package:serverpod/serverpod.dart';
