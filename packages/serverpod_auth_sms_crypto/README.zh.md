@@ -6,6 +6,10 @@ Serverpod 短信认证手机号加密存储实现（服务端）。
 
 [English](README.md)
 
+> **💡 推荐**：使用组合包 [`serverpod_auth_sms`](https://pub.dev/packages/serverpod_auth_sms) 而不是直接导入本包。组合包已自动处理 `Protocol`/`Endpoints` 冲突，并包含完整文档。
+>
+> **注意**：本包同时存储哈希值和加密值，因此涵盖了 `serverpod_auth_sms_hash_server` 的所有功能，还支持解密手机号。
+
 ## 功能特性
 
 - **可逆加密** - 使用 AES-256-GCM 加密手机号，可安全解密
@@ -25,16 +29,16 @@ Serverpod 短信认证手机号加密存储实现（服务端）。
 ```yaml
 # gen_server/pubspec.yaml
 dependencies:
-  serverpod_auth_sms_crypto_server: ^0.1.1
-  serverpod_auth_sms_core_server: ^0.1.1
+  serverpod_auth_sms_crypto_server: ^0.1.2
+  serverpod_auth_sms_core_server: ^0.1.2
 ```
 
 客户端：
 ```yaml
 # gen_client/pubspec.yaml
 dependencies:
-  serverpod_auth_sms_crypto_client: ^0.1.1
-  serverpod_auth_sms_core_client: ^0.1.1
+  serverpod_auth_sms_crypto_client: ^0.1.2
+  serverpod_auth_sms_core_client: ^0.1.2
 ```
 
 ## 数据库迁移

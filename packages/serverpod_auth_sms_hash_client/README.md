@@ -18,7 +18,7 @@ For manual installation:
 
 ```yaml
 dependencies:
-  serverpod_auth_sms_hash_client: ^0.1.1
+  serverpod_auth_sms_hash_client: ^0.1.2
 ```
 
 ## Related Packages

@@ -9,5 +9,10 @@ export 'src/sms_auth_ui_config.dart';
 export 'src/sms_idp.dart';
 export 'src/sms_idp_config.dart';
 export 'src/sms_idp_utils.dart';
+
+// Note: Protocol and Endpoints MUST be exported for Serverpod's generated code
+// to work across modules. When importing this package directly in your server,
+// use: import '...' hide Protocol, Endpoints;
+// Or use the combined package `serverpod_auth_sms` which handles this for you.
 export 'src/generated/endpoints.dart';
 export 'src/generated/protocol.dart';

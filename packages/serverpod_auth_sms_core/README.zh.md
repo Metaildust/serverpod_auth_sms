@@ -6,6 +6,13 @@ Serverpod 短信认证核心模块（服务端），提供短信注册、验证�
 
 [English](README.md)
 
+> **💡 推荐**：使用组合包 [`serverpod_auth_sms`](https://pub.dev/packages/serverpod_auth_sms) 而不是直接导入本包。组合包已自动处理 `Protocol`/`Endpoints` 冲突，并包含完整文档。
+>
+> ```yaml
+> dependencies:
+>   serverpod_auth_sms: ^0.1.2  # 推荐 - 无需手动 hide
+> ```
+
 ## 功能特性
 
 - **短信注册** - 通过手机号和验证码注册新账号
@@ -20,7 +27,7 @@ Serverpod 短信认证核心模块（服务端），提供短信注册、验证�
 
 ```yaml
 dependencies:
-  serverpod_auth_sms_core_server: ^0.1.1
+  serverpod_auth_sms_core_server: ^0.1.2
 ```
 
 ## 使用方法

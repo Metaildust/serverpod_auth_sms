@@ -6,6 +6,10 @@ Encrypted phone number storage implementation for Serverpod SMS authentication (
 
 [中文文档](README.zh.md)
 
+> **💡 Recommended**: Use the combined package [`serverpod_auth_sms`](https://pub.dev/packages/serverpod_auth_sms) instead of importing this package directly. The combined package handles `Protocol`/`Endpoints` conflicts automatically and includes comprehensive documentation.
+>
+> **Note**: This package stores both hash and encrypted values, so it covers all functionality of `serverpod_auth_sms_hash_server` while also supporting phone number decryption.
+
 ## Features
 
 - **Reversible Encryption** - Uses AES-256-GCM to encrypt phone numbers, safely decryptable
@@ -25,16 +29,16 @@ Server:
 ```yaml
 # gen_server/pubspec.yaml
 dependencies:
-  serverpod_auth_sms_crypto_server: ^0.1.1
-  serverpod_auth_sms_core_server: ^0.1.1
+  serverpod_auth_sms_crypto_server: ^0.1.2
+  serverpod_auth_sms_core_server: ^0.1.2
 ```
 
 Client:
 ```yaml
 # gen_client/pubspec.yaml
 dependencies:
-  serverpod_auth_sms_crypto_client: ^0.1.1
-  serverpod_auth_sms_core_client: ^0.1.1
+  serverpod_auth_sms_crypto_client: ^0.1.2
+  serverpod_auth_sms_core_client: ^0.1.2
 ```
 
 ## Database Migration

@@ -6,6 +6,13 @@ Core SMS authentication module for Serverpod (server-side), providing SMS regist
 
 [中文文档](README.zh.md)
 
+> **💡 Recommended**: Use the combined package [`serverpod_auth_sms`](https://pub.dev/packages/serverpod_auth_sms) instead of importing this package directly. The combined package handles `Protocol`/`Endpoints` conflicts automatically and includes comprehensive documentation.
+>
+> ```yaml
+> dependencies:
+>   serverpod_auth_sms: ^0.1.2  # Recommended - no manual hide needed
+> ```
+
 ## Features
 
 - **SMS Registration** - Register new accounts with phone number and verification code
@@ -20,7 +27,7 @@ Core SMS authentication module for Serverpod (server-side), providing SMS regist
 
 ```yaml
 dependencies:
-  serverpod_auth_sms_core_server: ^0.1.1
+  serverpod_auth_sms_core_server: ^0.1.2
 ```
 
 ## Usage

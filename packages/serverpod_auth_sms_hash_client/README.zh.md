@@ -18,7 +18,7 @@ Serverpod 短信认证哈希存储模块的客户端包。
 
 ```yaml
 dependencies:
-  serverpod_auth_sms_hash_client: ^0.1.1
+  serverpod_auth_sms_hash_client: ^0.1.2
 ```
 
 ## 相关包

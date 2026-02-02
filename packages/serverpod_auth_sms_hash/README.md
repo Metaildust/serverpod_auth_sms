@@ -6,6 +6,10 @@ Hash-based phone number storage implementation for Serverpod SMS authentication 
 
 [中文文档](README.zh.md)
 
+> **💡 Recommended**: Use the combined package [`serverpod_auth_sms`](https://pub.dev/packages/serverpod_auth_sms) instead of importing this package directly. The combined package handles `Protocol`/`Endpoints` conflicts automatically.
+>
+> **Note**: The [`serverpod_auth_sms_crypto_server`](https://pub.dev/packages/serverpod_auth_sms_crypto_server) package includes all hash functionality plus the ability to decrypt phone numbers. Consider using crypto storage unless you have strict data minimization requirements.
+
 ## Features
 
 - **Irreversible Storage** - Uses HMAC-SHA256 to hash phone numbers, cannot be reversed
@@ -25,16 +29,16 @@ Server:
 ```yaml
 # gen_server/pubspec.yaml
 dependencies:
-  serverpod_auth_sms_hash_server: ^0.1.1
-  serverpod_auth_sms_core_server: ^0.1.1
+  serverpod_auth_sms_hash_server: ^0.1.2
+  serverpod_auth_sms_core_server: ^0.1.2
 ```
 
 Client:
 ```yaml
 # gen_client/pubspec.yaml
 dependencies:
-  serverpod_auth_sms_hash_client: ^0.1.1
-  serverpod_auth_sms_core_client: ^0.1.1
+  serverpod_auth_sms_hash_client: ^0.1.2
+  serverpod_auth_sms_core_client: ^0.1.2
 ```
 
 ## Database Migration
