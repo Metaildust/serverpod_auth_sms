@@ -131,7 +131,7 @@ For users in mainland China, we recommend using [tencent_sms_serverpod](https://
 
 ```yaml
 dependencies:
-  tencent_sms_serverpod: ^0.1.0
+  tencent_sms_serverpod: ^0.1.2
 ```
 
 Configure `config/passwords.yaml`:
@@ -140,12 +140,9 @@ Configure `config/passwords.yaml`:
 shared:
   tencentSmsSecretId: 'your-secret-id'
   tencentSmsSecretKey: 'your-secret-key'
-  tencentSmsSdkAppId: '1400000000'
-  tencentSmsSignName: 'YourSignName'
-  tencentSmsVerificationTemplateId: '123456'
 ```
 
-Usage example:
+Usage:
 
 ```dart
 import 'package:tencent_sms_serverpod/tencent_sms_serverpod.dart';
@@ -154,8 +151,18 @@ import 'package:serverpod_auth_sms/serverpod_auth_sms.dart';
 void run(List<String> args) async {
   final pod = Serverpod(args, Protocol(), Endpoints());
 
-  // Create Tencent Cloud SMS client
-  final smsConfig = TencentSmsConfigServerpod.fromServerpod(pod);
+  // Create Tencent Cloud SMS client (credentials from passwords.yaml, other config passed directly)
+  final smsConfig = TencentSmsConfigServerpod.fromServerpod(
+    pod,
+    appConfig: TencentSmsAppConfig(
+      smsSdkAppId: '1400000000',
+      signName: 'YourSignName',
+      templateCsvPath: 'config/sms/templates.csv',
+      verificationTemplateNameLogin: 'Login',
+      verificationTemplateNameRegister: 'Register',
+      verificationTemplateNameResetPassword: 'ResetPassword',
+    ),
+  );
   final smsClient = TencentSmsClient(smsConfig);
   final smsHelper = SmsAuthCallbackHelper(smsClient);
 

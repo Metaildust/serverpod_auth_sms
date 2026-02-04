@@ -1,3 +1,6 @@
+## 0.1.5
+- Synchronized version numbers across all packages
+
 ## 0.1.2
 - Documentation: added recommendation to use combined package
 - Clarified that crypto storage covers all hash functionality

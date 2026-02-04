@@ -1,6 +1,6 @@
 name: serverpod_auth_sms_core_server
 description: Server-side core for SMS registration and code login in Serverpod.
-version: 0.1.2
+version: 0.1.5
 repository: https://github.com/Metaildust/serverpod_auth_sms
 homepage: https://pub.dev/packages/serverpod_auth_sms_core_server
 

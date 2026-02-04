@@ -131,7 +131,7 @@ Future<void> _sendSmsCode(
 
 ```yaml
 dependencies:
-  tencent_sms_serverpod: ^0.1.0
+  tencent_sms_serverpod: ^0.1.2
 ```
 
 配置 `config/passwords.yaml`：
@@ -140,12 +140,9 @@ dependencies:
 shared:
   tencentSmsSecretId: 'your-secret-id'
   tencentSmsSecretKey: 'your-secret-key'
-  tencentSmsSdkAppId: '1400000000'
-  tencentSmsSignName: '你的签名'
-  tencentSmsVerificationTemplateId: '123456'
 ```
 
-使用示例：
+使用：
 
 ```dart
 import 'package:tencent_sms_serverpod/tencent_sms_serverpod.dart';
@@ -154,8 +151,18 @@ import 'package:serverpod_auth_sms/serverpod_auth_sms.dart';
 void run(List<String> args) async {
   final pod = Serverpod(args, Protocol(), Endpoints());
 
-  // 创建腾讯云短信客户端
-  final smsConfig = TencentSmsConfigServerpod.fromServerpod(pod);
+  // 创建腾讯云短信客户端（凭据从 passwords.yaml 读取，其他配置直接传入）
+  final smsConfig = TencentSmsConfigServerpod.fromServerpod(
+    pod,
+    appConfig: TencentSmsAppConfig(
+      smsSdkAppId: '1400000000',
+      signName: '你的签名',
+      templateCsvPath: 'config/sms/templates.csv',
+      verificationTemplateNameLogin: '登录',
+      verificationTemplateNameRegister: '注册',
+      verificationTemplateNameResetPassword: '修改密码',
+    ),
+  );
   final smsClient = TencentSmsClient(smsConfig);
   final smsHelper = SmsAuthCallbackHelper(smsClient);
 

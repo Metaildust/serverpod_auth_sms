@@ -1,3 +1,7 @@
+## 0.1.5
+- Synchronized version numbers across all packages
+- Updated dependency constraints
+
 ## 0.1.4
 - Clarify Tencent Cloud SMS is for China business
 

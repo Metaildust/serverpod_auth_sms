@@ -44,9 +44,9 @@ final phoneIdStore = PhoneIdCryptoStore.fromPasswords(pod); // Crypto (recommend
 ```yaml
 # gen_server/pubspec.yaml
 dependencies:
-  serverpod_auth_sms: ^0.1.2
+  serverpod_auth_sms: ^0.1.5
   # Optional: Tencent Cloud SMS integration (for China business)
-  tencent_sms_serverpod: ^0.1.0
+  tencent_sms_serverpod: ^0.1.2
 ```
 
 ### Client Dependencies
@@ -54,10 +54,10 @@ dependencies:
 ```yaml
 # gen_client/pubspec.yaml
 dependencies:
-  serverpod_auth_sms_core_client: ^0.1.2
+  serverpod_auth_sms_core_client: ^0.1.5
   # Add ONE of the following based on your storage choice:
-  serverpod_auth_sms_crypto_client: ^0.1.2  # For crypto storage
-  # serverpod_auth_sms_hash_client: ^0.1.2  # For hash storage
+  serverpod_auth_sms_crypto_client: ^0.1.5  # For crypto storage
+  # serverpod_auth_sms_hash_client: ^0.1.5  # For hash storage
 ```
 
 ## Quick Start
@@ -194,8 +194,18 @@ import 'package:tencent_sms_serverpod/tencent_sms_serverpod.dart';
 void run(List<String> args) async {
   final pod = Serverpod(args, Protocol(), Endpoints());
 
-  // Create Tencent Cloud SMS client
-  final smsConfig = TencentSmsConfigServerpod.fromServerpod(pod);
+  // Create Tencent Cloud SMS client (credentials from passwords.yaml, other config passed directly)
+  final smsConfig = TencentSmsConfigServerpod.fromServerpod(
+    pod,
+    appConfig: TencentSmsAppConfig(
+      smsSdkAppId: '1400000000',
+      signName: 'YourSignName',
+      templateCsvPath: 'config/sms/templates.csv',
+      verificationTemplateNameLogin: 'Login',
+      verificationTemplateNameRegister: 'Register',
+      verificationTemplateNameResetPassword: 'ResetPassword',
+    ),
+  );
   final smsClient = TencentSmsClient(smsConfig);
   // Use Chinese error messages: TencentSmsClient(smsConfig, localizations: const SmsLocalizationsZh())
   final smsHelper = SmsAuthCallbackHelper(smsClient);
@@ -343,8 +353,8 @@ If you must use individual packages (e.g., to avoid crypto dependencies when onl
 
 ```yaml
 dependencies:
-  serverpod_auth_sms_core_server: ^0.1.2
-  serverpod_auth_sms_hash_server: ^0.1.2  # Or _crypto_server
+  serverpod_auth_sms_core_server: ^0.1.5
+  serverpod_auth_sms_hash_server: ^0.1.5  # Or _crypto_server
 ```
 
 ```dart

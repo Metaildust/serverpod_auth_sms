@@ -1,6 +1,6 @@
 name: serverpod_auth_sms_hash_server
 description: Hash-only phone storage for Serverpod SMS auth.
-version: 0.1.2
+version: 0.1.5
 repository: https://github.com/Metaildust/serverpod_auth_sms
 homepage: https://pub.dev/packages/serverpod_auth_sms_hash_server
 
@@ -12,7 +12,7 @@ dependencies:
   serverpod: ^3.2.3
   serverpod_auth_core_server: ^3.2.3
   serverpod_auth_idp_server: ^3.2.3
-  serverpod_auth_sms_core_server: ^0.1.0
+  serverpod_auth_sms_core_server: ^0.1.5
 
 dev_dependencies:
   test: ^1.25.0

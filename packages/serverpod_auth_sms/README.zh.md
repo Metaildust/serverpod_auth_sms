@@ -44,9 +44,9 @@ final phoneIdStore = PhoneIdCryptoStore.fromPasswords(pod); // 加密（推荐�
 ```yaml
 # gen_server/pubspec.yaml
 dependencies:
-  serverpod_auth_sms: ^0.1.2
+  serverpod_auth_sms: ^0.1.5
   # 可选：腾讯云短信集成（中国业务）
-  tencent_sms_serverpod: ^0.1.0
+  tencent_sms_serverpod: ^0.1.5
 ```
 
 ### 客户端依赖
@@ -54,10 +54,10 @@ dependencies:
 ```yaml
 # gen_client/pubspec.yaml
 dependencies:
-  serverpod_auth_sms_core_client: ^0.1.2
+  serverpod_auth_sms_core_client: ^0.1.5
   # 根据存储方式选择其一：
-  serverpod_auth_sms_crypto_client: ^0.1.2  # 加密存储
-  # serverpod_auth_sms_hash_client: ^0.1.2  # 哈希存储
+  serverpod_auth_sms_crypto_client: ^0.1.5  # 加密存储
+  # serverpod_auth_sms_hash_client: ^0.1.5  # 哈希存储
 ```
 
 ## 快速开始
@@ -194,8 +194,18 @@ import 'package:tencent_sms_serverpod/tencent_sms_serverpod.dart';
 void run(List<String> args) async {
   final pod = Serverpod(args, Protocol(), Endpoints());
 
-  // 创建腾讯云短信客户端
-  final smsConfig = TencentSmsConfigServerpod.fromServerpod(pod);
+  // 创建腾讯云短信客户端（凭据从 passwords.yaml 读取，其他配置直接传入）
+  final smsConfig = TencentSmsConfigServerpod.fromServerpod(
+    pod,
+    appConfig: TencentSmsAppConfig(
+      smsSdkAppId: '1400000000',
+      signName: '你的签名',
+      templateCsvPath: 'config/sms/templates.csv',
+      verificationTemplateNameLogin: '登录',
+      verificationTemplateNameRegister: '注册',
+      verificationTemplateNameResetPassword: '修改密码',
+    ),
+  );
   final smsClient = TencentSmsClient(smsConfig);
   // 使用中文错误消息：TencentSmsClient(smsConfig, localizations: const SmsLocalizationsZh())
   final smsHelper = SmsAuthCallbackHelper(smsClient);
@@ -343,8 +353,8 @@ Future<void> _sendSms(Session session, {...}) async {
 
 ```yaml
 dependencies:
-  serverpod_auth_sms_core_server: ^0.1.2
-  serverpod_auth_sms_hash_server: ^0.1.2  # 或 _crypto_server
+  serverpod_auth_sms_core_server: ^0.1.5
+  serverpod_auth_sms_hash_server: ^0.1.5  # 或 _crypto_server
 ```
 
 ```dart

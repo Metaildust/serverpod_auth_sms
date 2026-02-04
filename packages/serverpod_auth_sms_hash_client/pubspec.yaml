@@ -1,6 +1,6 @@
 name: serverpod_auth_sms_hash_client
 description: Client for serverpod_auth_sms_hash.
-version: 0.1.2
+version: 0.1.5
 repository: https://github.com/Metaildust/serverpod_auth_sms
 homepage: https://pub.dev/packages/serverpod_auth_sms_hash_client
 
@@ -10,7 +10,7 @@ environment:
 dependencies:
   serverpod_auth_core_client: ^3.2.3
   serverpod_auth_idp_client: ^3.2.3
-  serverpod_auth_sms_core_client: ^0.1.0
+  serverpod_auth_sms_core_client: ^0.1.5
   serverpod_client: ^3.2.3
 
 dev_dependencies:
