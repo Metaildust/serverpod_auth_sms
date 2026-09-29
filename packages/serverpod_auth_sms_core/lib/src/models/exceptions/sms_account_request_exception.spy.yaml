@@ -1,0 +1,4 @@
+### Exception to be thrown if SMS registration request fails.
+exception: SmsAccountRequestException
+fields:
+  reason: SmsAccountRequestExceptionReason

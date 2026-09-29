@@ -1,0 +1,9 @@
+### User decision for phone-bind conflict.
+enum: SmsBindFinishDecision
+serialized: byName
+default: registerNew
+values:
+  ### Keep phone on old account, migrate current WeChat (if any), and sign in old account.
+  - bindAndLogin
+  ### Move phone from old account to current account.
+  - registerNew

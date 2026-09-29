@@ -1,0 +1,20 @@
+## 0.1.7
+- Docs: use generic `server/pubspec.yaml` in install examples.
+
+## 0.1.6
+- Added `unbindPhoneByHash` implementation for conflict-driven phone migration.
+- Updated dependency constraint baseline to `serverpod_auth_sms_core_server: ^0.1.6`.
+
+## 0.1.5
+- Synchronized version numbers across all packages
+
+## 0.1.2
+- Documentation: added recommendation to use combined package
+- Clarified that crypto storage covers all hash functionality
+
+## 0.1.1
+- Switch README to English as default, Chinese as README.zh.md
+
+## 0.1.0
+
+- Initial release: phone hash storage for SMS auth.

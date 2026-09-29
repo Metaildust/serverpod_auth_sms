@@ -1,0 +1,17 @@
+### Phone hash storage.
+class: PhoneIdHash
+serverOnly: true
+table: serverpod_auth_sms_phone_id_hash
+fields:
+  id: UuidValue?, defaultPersist=random_v7
+  authUser: module:auth:AuthUser?, relation(onDelete=Cascade)
+  createdAt: DateTime, default=now
+  phoneHash: String
+
+indexes:
+  serverpod_auth_sms_phone_id_hash_phone:
+    fields: phoneHash
+    unique: true
+  serverpod_auth_sms_phone_id_hash_auth_user:
+    fields: authUserId
+    unique: true

@@ -1,0 +1,11 @@
+### Why bindAndLogin is disabled in conflict dialog.
+enum: SmsBindAndLoginDisabledReason
+serialized: byName
+default: unknown
+values:
+  ### Old account already binds a different WeChat account.
+  - oldAccountHasDifferentWechat
+  ### Disabled by business policy.
+  - policyRejected
+  ### Unknown reason.
+  - unknown

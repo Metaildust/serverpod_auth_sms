@@ -1,0 +1,5 @@
+.dart_tool/
+pubspec.lock
+pubspec_overrides.yaml
+example/.dart_tool/
+example/pubspec.lock

@@ -1,0 +1,8 @@
+type: module
+nickname: serverpod_auth_sms_core_server
+
+modules:
+  serverpod_auth_core:
+    nickname: auth
+  serverpod_auth_idp:
+    nickname: idp

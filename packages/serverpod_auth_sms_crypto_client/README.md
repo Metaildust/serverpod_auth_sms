@@ -1,0 +1,32 @@
+# serverpod_auth_sms_crypto_client
+
+[![pub package](https://img.shields.io/pub/v/serverpod_auth_sms_crypto_client.svg)](https://pub.dev/packages/serverpod_auth_sms_crypto_client)
+
+Client package for Serverpod SMS authentication crypto storage module.
+
+[中文文档](README.zh.md)
+
+## Overview
+
+This package contains the client protocol code generated from `serverpod_auth_sms_crypto_server` module. Since the crypto storage module mainly runs on the server side, this client package is primarily for protocol serialization support.
+
+## Installation
+
+You typically don't need to install this package directly. When you generate Serverpod client code for your Flutter app and the server depends on `serverpod_auth_sms_crypto_server`, this package is usually included as a transitive dependency.
+
+For manual installation:
+
+```yaml
+dependencies:
+  serverpod_auth_sms_crypto_client: ^0.1.6
+```
+
+## Related Packages
+
+- [serverpod_auth_sms_crypto_server](https://pub.dev/packages/serverpod_auth_sms_crypto_server) - Server-side crypto storage module
+- [serverpod_auth_sms_core_client](https://pub.dev/packages/serverpod_auth_sms_core_client) - Core module client
+- [serverpod_auth_sms_hash_client](https://pub.dev/packages/serverpod_auth_sms_hash_client) - Hash storage client
+
+## License
+
+MIT License

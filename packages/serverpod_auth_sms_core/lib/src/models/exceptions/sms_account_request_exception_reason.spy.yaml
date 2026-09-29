@@ -1,0 +1,17 @@
+### The reason for why the SMS registration request was rejected.
+enum: SmsAccountRequestExceptionReason
+serialized: byName
+default: unknown
+values:
+  ### Request has expired.
+  - expired
+  ### Invalid verification code or request id.
+  - invalid
+  ### Password does not match policy.
+  - policyViolation
+  ### Too many verification attempts.
+  - tooManyAttempts
+  ### 新旧写法对上两个账号。
+  - phoneIdentityConflict
+  ### Unknown error occurred.
+  - unknown

@@ -1,0 +1,21 @@
+### The reason for why the phone bind request was rejected.
+enum: SmsPhoneBindExceptionReason
+serialized: byName
+default: unknown
+values:
+  ### Invalid token, code, or phone.
+  - invalid
+  ### Too many attempts made for the same request.
+  - tooManyAttempts
+  ### Bind request expired.
+  - expired
+  ### Phone already bound to another account.
+  - phoneAlreadyBound
+  ### The conflict owner changed between verify and finish.
+  - conflictStateChanged
+  ### bindAndLogin is disabled by policy.
+  - bindAndLoginDisabled
+  ### 新旧写法对上两个账号。
+  - phoneIdentityConflict
+  ### Unknown error occurred.
+  - unknown

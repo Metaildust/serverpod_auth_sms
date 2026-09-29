@@ -1,0 +1,4 @@
+### Exception to be thrown if SMS login fails.
+exception: SmsLoginException
+fields:
+  reason: SmsLoginExceptionReason

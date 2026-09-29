@@ -1,0 +1,14 @@
+### SMS bind-code verification result (V2, conflict-aware).
+class: SmsVerifyBindResultV2
+serverOnly: false
+fields:
+  ### Verification token used by finishBindPhoneV2.
+  bindToken: String
+  ### Whether phone is currently bound by another account.
+  hasConflict: bool
+  ### Conflict owner snapshot. Used by finish phase recheck.
+  expectedConflictOwnerAuthUserId: UuidValue?
+  ### Whether bindAndLogin option is available.
+  bindAndLoginEnabled: bool
+  ### Why bindAndLogin is disabled (if disabled).
+  bindAndLoginDisabledReason: SmsBindAndLoginDisabledReason?

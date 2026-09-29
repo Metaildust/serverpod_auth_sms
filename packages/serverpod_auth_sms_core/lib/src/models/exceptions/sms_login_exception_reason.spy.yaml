@@ -1,0 +1,19 @@
+### The reason for why the SMS login was rejected.
+enum: SmsLoginExceptionReason
+serialized: byName
+default: unknown
+values:
+  ### Invalid token, code, or phone.
+  - invalid
+  ### Too many attempts made for the same request.
+  - tooManyAttempts
+  ### Login request expired.
+  - expired
+  ### Password is required for unregistered phone.
+  - passwordRequired
+  ### Password does not match policy.
+  - policyViolation
+  ### 新旧写法对上两个账号。
+  - phoneIdentityConflict
+  ### Unknown error occurred.
+  - unknown

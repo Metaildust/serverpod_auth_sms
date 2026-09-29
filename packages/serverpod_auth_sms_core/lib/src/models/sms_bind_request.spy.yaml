@@ -1,0 +1,15 @@
+### Pending SMS phone bind request.
+class: SmsBindRequest
+serverOnly: true
+table: serverpod_auth_sms_bind_request
+fields:
+  id: UuidValue?, defaultPersist=random_v7
+  createdAt: DateTime, default=now
+  authUser: module:auth:AuthUser?, relation(onDelete=Cascade)
+  phoneHash: String
+  challenge: module:idp:SecretChallenge?, relation(onDelete=Cascade)
+  bindChallenge: module:idp:SecretChallenge?, relation(onDelete=Cascade, optional)
+
+indexes:
+  serverpod_auth_sms_bind_request_auth_user:
+    fields: authUserId
