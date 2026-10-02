@@ -18,7 +18,7 @@ For manual installation:
 
 ```yaml
 dependencies:
-  serverpod_auth_sms_core_client: ^0.2.0
+  serverpod_auth_sms_core_client: ^0.3.0
 ```
 
 ## Exports

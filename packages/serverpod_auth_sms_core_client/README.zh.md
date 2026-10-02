@@ -18,7 +18,7 @@ Serverpod 短信认证核心模块的客户端包。
 
 ```yaml
 dependencies:
-  serverpod_auth_sms_core_client: ^0.2.0
+  serverpod_auth_sms_core_client: ^0.3.0
 ```
 
 ## 导出内容

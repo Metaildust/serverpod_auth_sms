@@ -1,7 +1,7 @@
 name: serverpod_auth_sms_core_client
 resolution: workspace
 description: Client for serverpod_auth_sms_core.
-version: 0.2.0
+version: 0.3.0
 repository: https://github.com/Metaildust/serverpod_auth_sms
 homepage: https://pub.dev/packages/serverpod_auth_sms_core_client
 

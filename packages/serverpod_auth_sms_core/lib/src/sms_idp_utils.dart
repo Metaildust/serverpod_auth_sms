@@ -47,6 +47,23 @@ String? usableLoginSourceKey(String? raw) {
   return trimmed;
 }
 
+/// 注册、重置发码的号码次数桶。
+///
+/// 直接用规范哈希。带分隔符和规范串共用同一次数。
+/// 禁止再套旧规范化，避免 HMAC(旧函数(新函数(输入)))。
+String smsAccountPhoneRateNonce(PhoneIdStore store, String phone) {
+  return store.hashCanonicalPhone(phone);
+}
+
+/// 绑定发码次数桶。用户编号前缀保留，号码部分用规范哈希。
+String smsBindPhoneRateNonce({
+  required PhoneIdStore store,
+  required UuidValue authUserId,
+  required String phone,
+}) {
+  return '$authUserId:${store.hashCanonicalPhone(phone)}';
+}
+
 /// 登录请求 [phoneHash] 是否与本次号码的 {legacy,canonical} 哈希集合命中。
 ///
 /// 不得只比「整串 fingerprint 相等」：横杠发码、纯数字改密时整串不同，
@@ -64,9 +81,7 @@ bool smsLoginRequestMatchesPhoneHashes({
   if (phoneHash == fingerprint) {
     return true;
   }
-  return hashesFromPhoneFingerprint(
-    phoneHash,
-  ).any(target.contains);
+  return hashesFromPhoneFingerprint(phoneHash).any(target.contains);
 }
 
 /// 同一号码（或同一来源键）先拿库级咨询锁，再在这把锁里插入并计数。
@@ -87,11 +102,7 @@ Future<bool> smsTooManyUnderLock(
       transaction: tx,
     );
     final save = await tx.createSavepoint();
-    await limiter.recordAttempt(
-      session,
-      nonce: nonce,
-      transaction: tx,
-    );
+    await limiter.recordAttempt(session, nonce: nonce, transaction: tx);
     final count = await limiter.countAttempts(
       session,
       nonce: nonce,
@@ -302,7 +313,7 @@ class SmsIdpAccountCreationUtil {
         reason: SmsAccountRequestExceptionReason.invalid,
       );
     }
-    final nonce = _config.phoneIdStore.hashLegacyPhone(phone);
+    final nonce = smsAccountPhoneRateNonce(_config.phoneIdStore, phone);
     final stored = _config.phoneIdStore.requestFingerprint(phone);
 
     final sourceKey = usableLoginSourceKey(
@@ -1012,7 +1023,7 @@ class SmsIdpPasswordResetUtil {
         reason: SmsPasswordResetExceptionReason.invalid,
       );
     }
-    final nonce = _config.phoneIdStore.hashLegacyPhone(phone);
+    final nonce = smsAccountPhoneRateNonce(_config.phoneIdStore, phone);
     final stored = _config.phoneIdStore.requestFingerprint(phone);
 
     final sourceKey = usableLoginSourceKey(
@@ -1336,9 +1347,12 @@ class SmsIdpBindUtil {
     if (canonical.isEmpty) {
       throw SmsPhoneBindException(reason: SmsPhoneBindExceptionReason.invalid);
     }
-    final legacy = _config.phoneIdStore.hashLegacyPhone(phone);
     final stored = _config.phoneIdStore.requestFingerprint(phone);
-    final nonce = '$authUserId:$legacy';
+    final nonce = smsBindPhoneRateNonce(
+      store: _config.phoneIdStore,
+      authUserId: authUserId,
+      phone: phone,
+    );
 
     final sourceKey = usableLoginSourceKey(
       _config.resolveBindSourceKey?.call(session),
@@ -1370,11 +1384,7 @@ class SmsIdpBindUtil {
           transaction: tx,
         );
         if (existing != null) {
-          await SmsBindRequest.db.deleteRow(
-            session,
-            existing,
-            transaction: tx,
-          );
+          await SmsBindRequest.db.deleteRow(session, existing, transaction: tx);
         }
 
         final challenge = await _challengeUtil.createChallenge(
@@ -1417,10 +1427,7 @@ class SmsIdpBindUtil {
     return saved.id!;
   }
 
-  Future<void> _dropBindRequest(
-    Session session,
-    SmsBindRequest request,
-  ) async {
+  Future<void> _dropBindRequest(Session session, SmsBindRequest request) async {
     final current = await SmsBindRequest.db.findById(session, request.id!);
     if (current == null) {
       return;

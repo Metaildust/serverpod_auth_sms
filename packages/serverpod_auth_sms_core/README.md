@@ -10,7 +10,7 @@ Core SMS authentication module for Serverpod (server-side), providing SMS regist
 >
 > ```yaml
 > dependencies:
->   serverpod_auth_sms: ^0.1.7  # Recommended - no manual hide needed
+>   serverpod_auth_sms: ^0.1.8  # Recommended - no manual hide needed
 > ```
 
 ## Features
@@ -29,8 +29,8 @@ Core SMS authentication module for Serverpod (server-side), providing SMS regist
 
 ```yaml
 dependencies:
-  serverpod_auth_sms_core_client: ^0.2.0  # Recommended: reuse shared password policy helper
-  serverpod_auth_sms_core_server: ^0.1.6
+  serverpod_auth_sms_core_client: ^0.3.0  # Recommended: reuse shared password policy helper
+  serverpod_auth_sms_core_server: ^0.2.0
 ```
 
 ## Usage

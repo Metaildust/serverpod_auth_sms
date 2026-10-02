@@ -44,8 +44,8 @@ final phoneIdStore = PhoneIdCryptoStore.fromPasswords(pod); // 加密（推荐�
 ```yaml
 # server/pubspec.yaml
 dependencies:
-  serverpod_auth_sms: ^0.1.7
-  serverpod_auth_sms_core_client: ^0.2.0  # 推荐：复用共享密码策略 helper
+  serverpod_auth_sms: ^0.1.8
+  serverpod_auth_sms_core_client: ^0.3.0  # 推荐：复用共享密码策略 helper
   # 可选：腾讯云短信集成（中国业务）
   tencent_sms_serverpod: ^0.2.0
 ```
@@ -55,10 +55,10 @@ dependencies:
 ```yaml
 # client/pubspec.yaml
 dependencies:
-  serverpod_auth_sms_core_client: ^0.2.0
+  serverpod_auth_sms_core_client: ^0.3.0
   # 根据存储方式选择其一：
-  serverpod_auth_sms_crypto_client: ^0.1.6  # 加密存储
-  # serverpod_auth_sms_hash_client: ^0.1.6  # 哈希存储
+  serverpod_auth_sms_crypto_client: ^0.1.7  # 加密存储
+  # serverpod_auth_sms_hash_client: ^0.1.7  # 哈希存储
 ```
 
 ## 快速开始
@@ -352,8 +352,8 @@ Future<void> _sendSms(Session session, {...}) async {
 
 ```yaml
 dependencies:
-  serverpod_auth_sms_core_server: ^0.1.6
-  serverpod_auth_sms_hash_server: ^0.1.7  # 或 _crypto_server
+  serverpod_auth_sms_core_server: ^0.2.0
+  serverpod_auth_sms_hash_server: ^0.1.8  # 或 _crypto_server
 ```
 
 ```dart

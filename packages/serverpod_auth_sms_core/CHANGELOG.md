@@ -1,4 +1,6 @@
-## Unreleased
+## 0.2.0
+- BREAKING: `PhoneIdStore` implementors must override `matchHashes`, `rewriteMatchedPhoneToCanonical`, and `unbindPhoneByHash`.
+- Registration, password-reset, and the phone portion of bind request rate limits now use the canonical phone hash, so a number with separators and the same number without separators share one bucket. Login request rate limits stay on that hash. Bind buckets still prefix the auth user id.
 - Added dedicated password reset flow: `startPasswordReset`, `verifyPasswordResetCode`, and `finishPasswordReset`.
 - Added password reset protocol models and exceptions, including `SmsVerifyPasswordResetResult`, `SmsPasswordResetBlockedReason`, and `SmsPasswordResetException`.
 - Added password reset config hooks for send callback, verification-code lifetime, allowed attempts, and request rate limit.

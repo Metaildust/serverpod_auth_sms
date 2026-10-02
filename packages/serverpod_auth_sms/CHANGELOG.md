@@ -1,3 +1,8 @@
+## 0.1.8
+- Align bundled constraints to `serverpod_auth_sms_core_server` `^0.2.0`, `serverpod_auth_sms_hash_server` `^0.1.8`, and `serverpod_auth_sms_crypto_server` `^0.1.8`.
+- Bundling core `0.2.0` requires phone-store implementors to override `matchHashes`, `rewriteMatchedPhoneToCanonical`, and `unbindPhoneByHash`.
+- Registration, password-reset, and the phone portion of bind request rate limits now use the canonical phone hash, so a number with separators and the same number without separators share one bucket.
+
 ## 0.1.7
 - Docs: use generic Serverpod app wording in README and library comments.
 

@@ -1,3 +1,6 @@
+## 0.3.0
+- **破坏性**：客户端不再提供旧绑定方法 `verifyBindCode` 与 `finishBindPhone`。请改用 `verifyBindCodeV2` 与 `finishBindPhoneV2`。
+
 ## 0.2.0
 
 - `evaluateAuthPasswordPolicy` / `validateAuthPasswordPolicy` 新增可选命名参数 `minLength`（默认 `kDefaultPasswordMinLength = 8`），便于宿主项目与服务端对齐策略。

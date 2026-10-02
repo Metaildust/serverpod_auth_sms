@@ -1,3 +1,6 @@
+## 0.1.8
+- Raise `serverpod_auth_sms_core_server` lower bound to `^0.2.0` so this package resolves the core release that requires `PhoneIdStore` overrides.
+
 ## 0.1.7
 - Docs: use generic `server/pubspec.yaml` in install examples.
 

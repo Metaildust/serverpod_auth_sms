@@ -10,7 +10,7 @@ Serverpod 短信认证核心模块（服务端），提供短信注册、验证�
 >
 > ```yaml
 > dependencies:
->   serverpod_auth_sms: ^0.1.7  # 推荐 - 无需手动 hide
+>   serverpod_auth_sms: ^0.1.8  # 推荐 - 无需手动 hide
 > ```
 
 ## 功能特性
@@ -29,8 +29,8 @@ Serverpod 短信认证核心模块（服务端），提供短信注册、验证�
 
 ```yaml
 dependencies:
-  serverpod_auth_sms_core_client: ^0.2.0  # 推荐：复用共享密码策略 helper
-  serverpod_auth_sms_core_server: ^0.1.6
+  serverpod_auth_sms_core_client: ^0.3.0  # 推荐：复用共享密码策略 helper
+  serverpod_auth_sms_core_server: ^0.2.0
 ```
 
 ## 使用方法

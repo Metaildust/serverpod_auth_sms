@@ -44,8 +44,8 @@ final phoneIdStore = PhoneIdCryptoStore.fromPasswords(pod); // Crypto (recommend
 ```yaml
 # server/pubspec.yaml
 dependencies:
-  serverpod_auth_sms: ^0.1.7
-  serverpod_auth_sms_core_client: ^0.2.0  # Recommended: reuse shared password policy helper
+  serverpod_auth_sms: ^0.1.8
+  serverpod_auth_sms_core_client: ^0.3.0  # Recommended: reuse shared password policy helper
   # Optional: Tencent Cloud SMS integration (for China business)
   tencent_sms_serverpod: ^0.2.0
 ```
@@ -55,10 +55,10 @@ dependencies:
 ```yaml
 # client/pubspec.yaml
 dependencies:
-  serverpod_auth_sms_core_client: ^0.2.0
+  serverpod_auth_sms_core_client: ^0.3.0
   # Add ONE of the following based on your storage choice:
-  serverpod_auth_sms_crypto_client: ^0.1.6  # For crypto storage
-  # serverpod_auth_sms_hash_client: ^0.1.6  # For hash storage
+  serverpod_auth_sms_crypto_client: ^0.1.7  # For crypto storage
+  # serverpod_auth_sms_hash_client: ^0.1.7  # For hash storage
 ```
 
 ## Quick Start
@@ -353,8 +353,8 @@ If you must use individual packages (e.g., to avoid crypto dependencies when onl
 
 ```yaml
 dependencies:
-  serverpod_auth_sms_core_server: ^0.1.6
-  serverpod_auth_sms_hash_server: ^0.1.7  # Or _crypto_server
+  serverpod_auth_sms_core_server: ^0.2.0
+  serverpod_auth_sms_hash_server: ^0.1.8  # Or _crypto_server
 ```
 
 ```dart

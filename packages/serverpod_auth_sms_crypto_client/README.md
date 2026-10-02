@@ -18,7 +18,7 @@ For manual installation:
 
 ```yaml
 dependencies:
-  serverpod_auth_sms_crypto_client: ^0.1.6
+  serverpod_auth_sms_crypto_client: ^0.1.7
 ```
 
 ## Related Packages
